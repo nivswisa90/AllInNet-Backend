@@ -20,7 +20,7 @@ global.upload = multer({
         fileSize: 1000000000
     }
 }).array('multi-files')
-//s
+
 
 exports.utils = {
 
