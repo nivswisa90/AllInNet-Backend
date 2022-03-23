@@ -51,4 +51,4 @@ jobs:
         run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
       - name: Deploy
-        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} bash /root/projects/deploy.bash
+        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} bash /root/projects/deploy_backend.bash
