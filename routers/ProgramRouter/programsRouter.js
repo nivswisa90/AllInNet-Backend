@@ -1,11 +1,11 @@
-const { Router } = require("express");
+const {Router} = require("express");
 const programsRouter = new Router();
 const {
-  trainingProgramHandler,
+    trainingProgramHandler,
 } = require("../../API/Utils/Handlers/trainingProgramHandler");
 
 programsRouter.get("/:id?", trainingProgramHandler.getTrainingProgram);
 programsRouter.post("/", trainingProgramHandler.addTraining);
 programsRouter.post("/start", trainingProgramHandler.startTraining);
 
-module.exports = { programsRouter };
+module.exports = {programsRouter};
