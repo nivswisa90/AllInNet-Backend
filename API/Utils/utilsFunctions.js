@@ -1,12 +1,15 @@
 const fs = require('fs')
 const multer = require('multer')
+const appRoot = require('app-root-path')
+const path = require("path");
 
+global.uploadsDir = path.resolve(appRoot.path, 'uploads')
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        if (!fs.existsSync('./uploads')) {
-            fs.mkdirSync('./uploads')
+        if (!fs.existsSync(uploadsDir)) {
+            fs.mkdirSync(uploadsDir)
         }
-        cb(null, './uploads')
+        cb(null, uploadsDir)
     },
     filename: function (req, file, cb) {
         cb(null, file.originalname)
