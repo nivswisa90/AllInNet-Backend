@@ -1,0 +1,4 @@
+package-lock.json
+Dockerfile
+procfile
+.env.production
