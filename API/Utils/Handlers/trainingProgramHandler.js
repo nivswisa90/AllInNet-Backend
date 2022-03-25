@@ -58,31 +58,31 @@ exports.trainingProgramHandler = {
     },
     startTraining(req, res) {
         const minRequest = req.body.minReq;
+        console.log('dsadsad', minRequest)
         // Call to python with minRequest as parameter or call the DB later in results
-    try{
-        exec(
-            // Need to change the number 3 to be minRequest
-            `ssh -t pi@192.168.1.13 'cd /home/pi/Desktop/AllInNet-BallModule ;export DISPLAY=:0;python3 -m  ballmodule ${minRequest}'`,
-            (error, stdout, stderr) => {
-                if (error) {
-                    console.log(`error: ${error.message}`);
-                    return;
+        try {
+            exec(
+                // Need to change the number 3 to be minRequest
+                `ssh -t pi@192.168.1.13 'cd /home/pi/Desktop/AllInNet-BallModule ;export DISPLAY=:0;python3 -m  ballmodule ${minRequest}'`,
+                (error, stdout, stderr) => {
+                    if (error) {
+                        console.log(`error: ${error.message}`);
+                        return;
+                    }
+                    if (stderr) {
+                        console.log(`stderr: ${stderr}`);
+                        return;
+                    }
+                    console.log(`stdout: ${stdout}`);
                 }
-                if (stderr) {
-                    console.log(`stderr: ${stderr}`);
-                    return;
-                }
-                console.log(`stdout: ${stdout}`);
-            }
-        );
-        res.send("The Ball module done his JOB!");
-    }
-    catch(err){
-        logger.log({
-            level: "info",
-            message: "Unable to run Ball Module",
-        });
-    }
+            );
+            res.send("The Ball module done his JOB!");
+        } catch (err) {
+            logger.log({
+                level: "info",
+                message: "Unable to run Ball Module",
+            });
+        }
 
 
     },
