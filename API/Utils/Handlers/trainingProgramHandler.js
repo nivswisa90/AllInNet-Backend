@@ -40,11 +40,8 @@ exports.trainingProgramHandler = {
         if (req.params.id) {
             filter = {id: req.params.id};
         }
-        console.log(filter);
-        console.log(typeof filter);
         TrainingProgram.find(filter)
             .then((docs) => {
-                console.log(docs);
                 res.send(docs);
                 logger.log({
                     level: "info",
@@ -60,12 +57,12 @@ exports.trainingProgramHandler = {
             });
     },
     startTraining(req, res) {
-        const minRequest = req.body.minRequest.minReq;
+        const minRequest = req.body.minReq;
         // Call to python with minRequest as parameter or call the DB later in results
-
+    try{
         exec(
             // Need to change the number 3 to be minRequest
-            `ssh -t root@192.168.1.13 'cd /root/FinalProject/All-In-Net/BallModule ;export DISPLAY=:0;python3 -m  BallModule ${minRequest}'`,
+            `ssh -t pi@192.168.1.13 'cd /home/pi/Desktop/AllInNet-BallModule ;export DISPLAY=:0;python3 -m  ballmodule ${minRequest}'`,
             (error, stdout, stderr) => {
                 if (error) {
                     console.log(`error: ${error.message}`);
@@ -78,6 +75,16 @@ exports.trainingProgramHandler = {
                 console.log(`stdout: ${stdout}`);
             }
         );
+        res.send("The Ball module done his JOB!");
+    }
+    catch(err){
+        logger.log({
+            level: "info",
+            message: "Unable to run Ball Module",
+        });
+    }
+
+
     },
     endTraining(req, res) {
         // Stop python
