@@ -55,7 +55,7 @@ exports.trainingProgramHandler = {
                 res.json(err).status(500);
                 logger.log({
                     level: "Error",
-                    message: "Uanble to GET training program",
+                    message: "Unable to GET training program",
                 });
             });
     },
@@ -65,7 +65,7 @@ exports.trainingProgramHandler = {
 
         exec(
             // Need to change the number 3 to be minRequest
-            `ssh -t root@195.181.240.98 'cd /root/FinalProject/All-In-Net/BallModule ;export DISPLAY=:0;python3 -m  BallModule ${minRequest}'`,
+            `ssh -t root@192.168.1.13 'cd /root/FinalProject/All-In-Net/BallModule ;export DISPLAY=:0;python3 -m  BallModule ${minRequest}'`,
             (error, stdout, stderr) => {
                 if (error) {
                     console.log(`error: ${error.message}`);
