@@ -30,7 +30,7 @@ exports.utils = {
     calculateResult(minRequest, positions) {
         const initialValue = 0
         const totalSuccessful = positions.reduce((prev, curr) => prev + curr, initialValue);
-        result = minRequest - totalSuccessful
+        let result = minRequest - totalSuccessful
         return result <= 0 ? "Pass" : "Fail"
     }
 }
