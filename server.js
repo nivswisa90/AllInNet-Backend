@@ -15,7 +15,14 @@ app.use(express.urlencoded({extended: true}));
 
 // Cors
 app.use(cors());
-
+// app.use(cors({ credentials: true, origin: 'http://allinnet.online', methods: ["GET", "POST", "OPTIONS", "PUT", "DELETE"], preflightContinue: true }));
+// app.use((req, res, next) => {
+//     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+//     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+//     res.header('Access-Control-Allow-Credentials: true');
+//     res.set('Content-Type', 'application/json');
+//     next();
+// });
 // Initialize routes
 
 const {apiRouter} = require("./routers/apiRouter");

@@ -5,6 +5,7 @@ const {utils} = require("../utilsFunctions");
 const moment = require("moment");
 const fs = require('fs');
 const path = require('path');
+const TrainingProgram = require("../../../DB/Schemas/trainingProgram");
 
 
 exports.resultHandler = {
@@ -67,23 +68,40 @@ exports.resultHandler = {
 
     getTrainingResult(req, res) {
         let filter = {};
-        if (req.params.id != undefined) {
-            filter = {id: req.params.id};
-        }
-        TrainingProgramResult.find(filter)
-            .then((docs) => {
-                res.send(docs);
-                logger.log({
-                    level: "info",
-                    message: "Successfully GET training program result",
-                });
-            })
-            .catch((err) => {
+        if (req.params.id) {
+            // filter = {id: req.params.id};
+
+
+            // filter = {id: req.params.id};
+            TrainingProgramResult.find().sort({_id: -1}).limit(1).then((docs) => {
+                console.log("here", docs)
+                res.json(docs)
+            }).catch((err) => {
                 res.json(err).status(500);
                 logger.log({
                     level: "Error",
-                    message: "Unable to GET training program result",
+                    message: "Unable to GET training program",
                 });
-            });
+            })
+        }
+        else{
+            TrainingProgramResult.find(filter)
+                .then((docs) => {
+                    logger.log({
+                        level: "info",
+                        message: "Successfully GET training program result",
+                    });
+                    res.send(docs);
+
+                })
+                .catch((err) => {
+                    logger.log({
+                        level: "Error",
+                        message: "Unable to GET training program result",
+                    });
+                    res.status(500).json({err});
+                });
+        }
+
     },
 };

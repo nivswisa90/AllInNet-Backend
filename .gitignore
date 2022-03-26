@@ -4,3 +4,6 @@
 *uploads*
 uploads/*
 *.jpg
+.env
+.DS_Store
+.env
