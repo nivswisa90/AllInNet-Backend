@@ -58,7 +58,6 @@ exports.trainingProgramHandler = {
     },
     startTraining(req, res) {
         const minRequest = req.body.minReq;
-        console.log('dsadsad', minRequest)
         // Call to python with minRequest as parameter or call the DB later in results
         try {
             exec(
