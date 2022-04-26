@@ -20,18 +20,20 @@ exports.trainingProgramHandler = {
         newTraining
             .save()
             .then((docs) => {
-                res.send("The training program was successfully added");
                 logger.log({
                     level: "info",
                     message: "Successfully added training program",
                 });
+                res.send("The training program was successfully added");
+
             })
             .catch((err) => {
-                res.sendStatus(400).json(err);
                 logger.log({
                     level: "Error",
-                    message: "Uanble to add training program",
+                    message: `Unable to add training program: ${err} `,
                 });
+                res.sendStatus(400).json(err);
+
             });
     },
 
@@ -42,18 +44,20 @@ exports.trainingProgramHandler = {
         }
         TrainingProgram.find(filter)
             .then((docs) => {
-                res.send(docs);
                 logger.log({
                     level: "info",
                     message: "Successfully GET training program",
                 });
+                res.send(docs);
+
             })
             .catch((err) => {
-                res.json(err).status(500);
                 logger.log({
                     level: "Error",
                     message: "Unable to GET training program",
                 });
+                res.json(err).status(500);
+
             });
     },
     startTraining(req, res) {

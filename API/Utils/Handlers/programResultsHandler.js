@@ -47,23 +47,30 @@ exports.resultHandler = {
         newResult
             .save()
             .then(() => {
-                res.send("Successfully added training program result");
                 logger.log({
                     level: "info",
                     message: "Successfully added training program result",
                 });
+                res.send("Successfully added training program result");
+
             })
             .catch((err) => {
-                res.status(400).json(err.message);
                 logger.log({
                     level: "Error",
                     message: "Unable to add training program result",
                 });
+                res.status(400).json(err.message);
+
             });
     },
 
     saveImages(req, res) {
+        logger.log({
+            level: "info",
+            message: "Successfully saved images",
+        });
         res.json('done')
+
     },
 
     getTrainingResult(req, res) {
@@ -77,11 +84,12 @@ exports.resultHandler = {
                 console.log("here", docs)
                 res.json(docs)
             }).catch((err) => {
-                res.json(err).status(500);
                 logger.log({
                     level: "Error",
-                    message: "Unable to GET training program",
+                    message: `Unable to GET training program: ${err}`,
                 });
+                res.json(err).status(500);
+
             })
         }
         else{
@@ -97,7 +105,7 @@ exports.resultHandler = {
                 .catch((err) => {
                     logger.log({
                         level: "Error",
-                        message: "Unable to GET training program result",
+                        message: `Unable to GET training program result ${err}`,
                     });
                     res.status(500).json({err});
                 });

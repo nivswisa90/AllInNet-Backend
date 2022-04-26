@@ -18,21 +18,45 @@ exports.loginHandler = {
                         // name: docs.firstName,
                         // role: docs.role,
                         jwt.sign({id}, privateKey, {expiresIn: 300}, (err, token) => {
-                            if (err) return res.send("Authentication error").status(200)
-                            res.json({msg: "Successfully connected", token: token}).status(200)
+                            if (err) {
+                                logger.log({
+                                    level: "info",
+                                    message: `Authentication error: ${err}`,
+                                });
+                                return res.send("Authentication error").status(200)
+                            }
+                            logger.log({
+                                level: "info",
+                                message: "Successfully connected",
+                            });
+                            res.json({msg: "Successfully connected", token:token}).status(200)
                         })
                     }
                 } else {
+                    logger.log({
+                        level: "info",
+                        message: "User does not exist",
+                    });
                     res.json('User does not exist').status(400);
+
                 }
             })
-            .catch(err => console.log(`Error getting the data from DB: ${err}`));
+            .catch(err => {
+                logger.log({
+                    level: "info",
+                    message: `Error getting the data from DB: ${err}`,
+                });
+            });
     },
     addUser(req, res) {
         Users.findOne({email: req.body.values.email})
             .then(docs => {
                 if (docs) {
                     res.send("User already registered").status(200)
+                    logger.log({
+                        level: "info",
+                        message: `User already registered`,
+                    });
                 } else {
                     const newUser = new Users({
                         "firstName": req.body.values.firstName,
@@ -42,10 +66,23 @@ exports.loginHandler = {
                         "role": req.body.values.role
                     })
                     newUser.save()
-                        .then(docs => res.send("User successfully registered").status(200))
-                        .catch(err => console.log(err));
+                        .then(docs => {
+                            logger.log({
+                                level: "info",
+                                message: "User successfully registered",
+                            });
+                            res.send("User successfully registered").status(200)
+                        })
+                        .catch(err => {
+                            logger.log({
+                                level: "info",
+                                message: `Unable to save new user: ${err}`,
+                            });
+                        });
                 }
 
             })
     }
+
+
 }

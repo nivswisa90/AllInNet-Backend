@@ -19,7 +19,7 @@ app.use(cors());
 // Initialize routes
 
 const {apiRouter} = require("./routers/apiRouter");
-// Route
+const {logger} = require("./API/Utils/logger");
 app.use("/api", apiRouter);
 
 app.get("/", (req, res) => {
@@ -28,6 +28,10 @@ app.get("/", (req, res) => {
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
+    logger.log({
+        level: "Error",
+        message: `Something is broken!: ${err}`,
+    });
     res.status(500).send("Something is broken!");
 });
 
