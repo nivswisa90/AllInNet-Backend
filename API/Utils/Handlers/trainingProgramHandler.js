@@ -38,9 +38,12 @@ exports.trainingProgramHandler = {
     },
 
     getTrainingProgram(req, res) {
-        let filter = {};
+        const user = req.user
+        console.log(user)
+        // 4Find one by user.id
+        let filter = {}
         if (req.params.id) {
-            filter = {id: req.params.id};
+            filter = {id: req.params.id}
         }
         TrainingProgram.find(filter)
             .then((docs) => {
@@ -48,7 +51,7 @@ exports.trainingProgramHandler = {
                     level: "info",
                     message: "Successfully GET training program",
                 });
-                res.send(docs);
+                res.send(docs)
 
             })
             .catch((err) => {
@@ -56,7 +59,7 @@ exports.trainingProgramHandler = {
                     level: "Error",
                     message: "Unable to GET training program",
                 });
-                res.json(err).status(500);
+                res.json(err).status(500)
 
             });
     },
