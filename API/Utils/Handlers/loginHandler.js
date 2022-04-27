@@ -17,7 +17,7 @@ exports.loginHandler = {
                         const id = docs._id;
                         // name: docs.firstName,
                         // role: docs.role,
-                        jwt.sign({id}, privateKey, {expiresIn: 300}, (err, token) => {
+                        jwt.sign({id}, privateKey, {expiresIn: 1440}, (err, token) => {
                             if (err) {
                                 logger.log({
                                     level: "info",

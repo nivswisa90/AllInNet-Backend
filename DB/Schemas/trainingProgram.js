@@ -5,6 +5,7 @@ const trainingProgramSchema = new Schema({
     positions: {type: Object},
     minimumRequest: {type: Number},
     level: {type: String},
+    userId: {type:String}
 });
 const TrainingProgram = model("trainingprogram", trainingProgramSchema);
 module.exports = TrainingProgram;

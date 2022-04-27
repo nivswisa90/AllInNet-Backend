@@ -16,6 +16,7 @@ exports.trainingProgramHandler = {
             },
             minimumRequest: req.body.minimumRequest,
             level: req.body.level,
+            userId: req.body.userId ? req.body.userId : null,
         });
         newTraining
             .save()

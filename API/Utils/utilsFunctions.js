@@ -40,7 +40,6 @@ exports.utils = {
 
         if(token) {
             jwt.verify(token, process.env.PRIVATE_KEY, (err, decoded) => {
-                console.log('decoded', decoded.id)
                 if (err) return res.status(401).json({
                     isLoggedIn: false,
                     message: 'Failed to authenticate'
