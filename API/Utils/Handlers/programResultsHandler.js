@@ -75,41 +75,25 @@ exports.resultHandler = {
 
     getTrainingResult(req, res) {
         let filter = {};
-        if (req.params.id) {
-            // filter = {id: req.params.id};
-
-
-            // filter = {id: req.params.id};
-            TrainingProgramResult.find().sort({_id: -1}).limit(1).then((docs) => {
-                console.log("here", docs)
-                res.json(docs)
-            }).catch((err) => {
+        // filter = {playerId: req.user.id}
+        if(req.body.id){
+            filter = {playerId: req.body.id}
+        }else{
+            filter = {playerId: req.user.id}
+        }
+        TrainingProgramResult.find(filter)
+            .then((docs) => {
                 logger.log({
-                    level: "Error",
-                    message: `Unable to GET training program: ${err}`,
+                    level: "info",
+                    message: `GET training programs successfully`,
                 });
-                res.json(err).status(500);
-
-            })
-        }
-        else{
-            TrainingProgramResult.find(filter)
-                .then((docs) => {
-                    logger.log({
-                        level: "info",
-                        message: "Successfully GET training program result",
-                    });
-                    res.send(docs);
-
-                })
-                .catch((err) => {
-                    logger.log({
-                        level: "Error",
-                        message: `Unable to GET training program result ${err}`,
-                    });
-                    res.status(500).json({err});
-                });
-        }
-
+                res.json(docs).status(200)
+            }).catch((err) => {
+            logger.log({
+                level: "info",
+                message: `Unable to GET training program: ${err}`,
+            });
+            res.json(err).status(500);
+        })
     },
 };
