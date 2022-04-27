@@ -1,5 +1,6 @@
 const {logger} = require("../logger");
 const Users = require("../../../DB/Schemas/users");
+const {utils} = require("../utilsFunctions");
 
 exports.coachHandler = {
     addPlayer(req, res) {
@@ -60,14 +61,36 @@ exports.coachHandler = {
         })
     },
 
-    getTeamPlayers(req, res){
-        Users.find({_id:req.user.id})
-            .then(docs =>{
+    getTeamPlayers(req, res) {
+        const teamPlayers = []
+        Users.find({_id: req.user.id})
+            .then(async docs => {
+                logger.log({
+                    level: "info",
+                    message: `Successfully get all team player`,
+                });
+                // teamPlayers = utils.arrangeTeamPlayers(docs[0].players)
+                const  resu = docs[0].players.map(async doc => {
+                    await Users.findOne({_id: doc.id})
+                        .then(result => {
+                            console.log("results", result[0])
+                            teamPlayers.push(result[0])
+                        }).catch(err => res.send(err))
+                    return teamPlayers
+                })
+                if(resu)
+                    res.json(resu)
+                // console.log(teamPlayers)
 
-                res.send(docs[0].players)
-            }).catch(err=>{
-                console.log(err)
+                // res.send(teamPlayers).status(200)
+            }).catch(err => {
+            logger.log({
+                level: "info",
+                message: "Unable to add training program player"
+            });
+            res.status(400).json(err.message)
         })
-
     },
+
+
 }

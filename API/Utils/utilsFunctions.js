@@ -51,5 +51,9 @@ exports.utils = {
         }else{
             res.json({message: "Incorrect Token Given", isLoggedIn: false})
         }
+    },
+    
+    arrangeTeamPlayers(players){
+        
     }
 }
