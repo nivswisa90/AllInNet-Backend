@@ -5,6 +5,7 @@ const coachRouter = new Router();
 
 coachRouter.post("/addplayer", utils.verifyJWT, coachHandler.addPlayer)
 coachRouter.post("/addtraining", utils.verifyJWT, coachHandler.addProgramToPlayer)
+coachRouter.get("/players", utils.verifyJWT, coachHandler.getTeamPlayers)
 
 
 module.exports = {coachRouter};

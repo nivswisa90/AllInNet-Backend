@@ -70,15 +70,13 @@ exports.resultHandler = {
             message: "Successfully saved images",
         });
         res.json('done')
-
     },
 
     getTrainingResult(req, res) {
         let filter = {};
-        // filter = {playerId: req.user.id}
-        if(req.body.id){
+        if (req.body.id) {
             filter = {playerId: req.body.id}
-        }else{
+        } else {
             filter = {playerId: req.user.id}
         }
         TrainingProgramResult.find(filter)

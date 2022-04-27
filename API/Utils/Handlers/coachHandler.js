@@ -58,5 +58,16 @@ exports.coachHandler = {
             });
             res.status(400).json(err.message)
         })
-    }
+    },
+
+    getTeamPlayers(req, res){
+        Users.find({_id:req.user.id})
+            .then(docs =>{
+
+                res.send(docs[0].players)
+            }).catch(err=>{
+                console.log(err)
+        })
+
+    },
 }
