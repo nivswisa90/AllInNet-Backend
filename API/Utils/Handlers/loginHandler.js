@@ -29,7 +29,7 @@ exports.loginHandler = {
                                 level: "info",
                                 message: "Successfully connected",
                             });
-                            res.json({msg: "Successfully connected", token:token}).status(200)
+                            res.json({msg: "Successfully connected", token: token}).status(200)
                         })
                     }
                 } else {
@@ -82,6 +82,18 @@ exports.loginHandler = {
                 }
 
             })
+    },
+    getUsers(req, res) {
+        console.log(req.user)
+        
+        Users.find({_id: req.user.id})
+            .then( docs => {
+                console.log(docs)
+                logger.log({
+                    level: "info",
+                    message: `Successfully get all team player`,
+                });
+            }).catch(err => console.log(err))
     }
 
 

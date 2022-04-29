@@ -56,7 +56,7 @@ exports.resultHandler = {
             })
             .catch((err) => {
                 logger.log({
-                    level: "Error",
+                    level: "info",
                     message: "Unable to add training program result",
                 });
                 res.status(400).json(err.message);
