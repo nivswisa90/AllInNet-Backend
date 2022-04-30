@@ -5,6 +5,24 @@ const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 const privateKey = process.env.PRIVATE_KEY;
 
+const setUserToken = (id, res, msg) => {
+    jwt.sign({id}, privateKey, {expiresIn: 86400}, (err, token) => {
+        if (err) {
+            logger.log({
+                level: "info",
+                message: `Authentication error: ${err}`,
+            });
+            return res.send("Authentication error").status(200)
+        }
+        logger.log({
+            level: "info",
+            message: msg,
+        });
+        res.json({msg: msg, token: token}).status(200)
+    })
+}
+
+
 
 exports.loginHandler = {
     login(req, res) {
@@ -15,22 +33,23 @@ exports.loginHandler = {
                         res.json('Wrong user or password');
                     } else {
                         const id = docs._id;
+                        setUserToken(id, res, "Successfully connected")
                         // name: docs.firstName,
                         // role: docs.role,
-                        jwt.sign({id}, privateKey, {expiresIn: 86400}, (err, token) => {
-                            if (err) {
-                                logger.log({
-                                    level: "info",
-                                    message: `Authentication error: ${err}`,
-                                });
-                                return res.send("Authentication error").status(200)
-                            }
-                            logger.log({
-                                level: "info",
-                                message: "Successfully connected",
-                            });
-                            res.json({msg: "Successfully connected", token: token}).status(200)
-                        })
+                        // jwt.sign({id}, privateKey, {expiresIn: 86400}, (err, token) => {
+                        //     if (err) {
+                        //         logger.log({
+                        //             level: "info",
+                        //             message: `Authentication error: ${err}`,
+                        //         });
+                        //         return res.send("Authentication error").status(200)
+                        //     }
+                        //     logger.log({
+                        //         level: "info",
+                        //         message: "Successfully connected",
+                        //     });
+                        //     res.json({msg: "Successfully connected", token: token}).status(200)
+                        // })
                     }
                 } else {
                     logger.log({
@@ -65,13 +84,15 @@ exports.loginHandler = {
                         "password": bcrypt.hashSync(req.body.values.password, 10),
                         "role": req.body.values.role
                     })
+
                     newUser.save()
                         .then(docs => {
-                            logger.log({
-                                level: "info",
-                                message: "User successfully registered",
-                            });
-                            res.send("User successfully registered").status(200)
+                            // logger.log({
+                            //     level: "info",
+                            //     message: "User successfully registered",
+                            // })
+                            setUserToken(docs._id, res, "User successfully registered")
+                            // res.send("User successfully registered").status(200)
                         })
                         .catch(err => {
                             logger.log({
@@ -92,6 +113,4 @@ exports.loginHandler = {
                 });
             }).catch(err => console.log(err))
     }
-
-
 }

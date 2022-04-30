@@ -40,7 +40,6 @@ exports.trainingProgramHandler = {
 
     getTrainingProgram(req, res) {
         const user = req.user
-        console.log(user)
         // 4Find one by user.id
         let filter = {}
         if (req.params.id) {
