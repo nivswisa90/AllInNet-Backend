@@ -54,70 +54,16 @@ exports.coachHandler = {
         })
     },
 
-    // Returns a player info
-    async getPlayerInfo(playerId) {
-        console.log('playerid', playerId)
-
-        await Users.findOne({_id: playerId})
-            .then(player => {
-                if (player)
-                    return player
-                return []
-            })
-            .catch(err => {
-                logger.error("Unable to fetch player information", {"id": playerId, "success": false, "error": err})
-                return []
-            })
-    },
-
-    getPlayersInfo(playerIds) {
-        let players = []
-        console.log("here!")
-        playerIds.forEach(async function (playerId) {
-            players.push(await this.getPlayerInfo(playerId))
-        })
-        return players
-    },
-
-
     // Return an array of player ids
-    async getTeamPlayers(req, res) {
-        // Get the coach only
-        console.log(req.user.id)
-        let playerIds = await Users.findOne({_id: req.user.id})
-            .then(coach => {
-                logger.info(`Successfully got all team player`);
-                // here we have the array of ids of players
-                return coach.players
+    getTeamPlayers(req, res) {
+        const coachPlayers = []
+        for (let i = 0; i < req.user.coachPlayers.length; i++) {
+            Users.findOne({_id: req.user.coachPlayers[i]}, function (err, player) {
+                coachPlayers.push(player)
+                if (i === req.user.coachPlayers.length - 1) {
+                    res.send(coachPlayers).status(200)
+                }
             })
-            .catch(err => {
-                logger.error("Error fetching coach players", {"error": err})
-            })
-        if(playerIds){
-            let players = module.exports.getPlayersInfo(playerIds)
-            console.log(players)
-            res.send()
         }
-        else
-            res.sendStatus(500)
     }
-    //         coach.players.map(player => {
-    //             // Get the info of the current player
-    //             Users.find({_id: player.id})
-    //                 .then(result => {
-    //                     console.log("result", result)
-    //                     teamPlayers.push(result)
-    //                 }).catch(err => res.send(err))
-    //             console.log('atthe end', teamPlayers)
-    //         })
-    //         console.log('after all', teamPlayers)
-    //         res.json(teamPlayers)
-    //         // res.send(teamPlayers).status(200)
-    //     }).catch(err => {
-    //     logger.log({
-    //         level: "info",
-    //         message: "Unable to add training program player"
-    //     });
-    //     res.status(400).json(err.message)
-    // })
 }

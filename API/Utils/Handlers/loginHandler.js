@@ -17,7 +17,7 @@ exports.loginHandler = {
                         const id = docs._id;
                         // name: docs.firstName,
                         // role: docs.role,
-                        jwt.sign({id}, privateKey, {expiresIn: 1440}, (err, token) => {
+                        jwt.sign({id}, privateKey, {expiresIn: 86400}, (err, token) => {
                             if (err) {
                                 logger.log({
                                     level: "info",
@@ -84,11 +84,8 @@ exports.loginHandler = {
             })
     },
     getUsers(req, res) {
-        console.log(req.user)
-        
         Users.find({_id: req.user.id})
             .then( docs => {
-                console.log(docs)
                 logger.log({
                     level: "info",
                     message: `Successfully get all team player`,
