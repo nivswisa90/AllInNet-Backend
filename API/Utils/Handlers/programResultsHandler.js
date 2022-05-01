@@ -11,7 +11,7 @@ const TrainingProgram = require("../../../DB/Schemas/trainingProgram");
 exports.resultHandler = {
     addTrainingResult(req, res) {
         // currentDate = new Date();
-        currentDate = moment().format("MMMM DD YYYY");
+        const currentDate = moment().format("MMMM DD YYYY");
         // Go to utils, to   check result(pass/fail)
         const successPositions = [
             success1 = parseInt(req.body.successfulThrowPos1),
