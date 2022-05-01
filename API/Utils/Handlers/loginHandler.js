@@ -91,7 +91,8 @@ exports.loginHandler = {
                     level: "info",
                     message: `Successfully get all team player`,
                 })
-                res.send(docs).status(200)
+                const user = {name: docs[0].firstName, id: docs[0].id}
+                res.send(user).status(200)
             }).catch(err => console.log(err))
     }
 }
