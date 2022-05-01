@@ -47,7 +47,7 @@ exports.utils = {
                 })
                 req.user = {};
                 req.user.id = decoded.id
-                User.findOne({_id: decoded.id})
+                User.findOne({id: decoded.id})
                     .then(user => {
                         user.role === 'coach' ? req.user.coachPlayers = user.players : null
                         next()
