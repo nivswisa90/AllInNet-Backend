@@ -1,6 +1,7 @@
 const {logger} = require("../logger");
 const Users = require("../../../DB/Schemas/users");
 const {utils} = require("../utilsFunctions");
+const {raw} = require("express");
 
 exports.coachHandler = {
     // Coach add player by inserting player's email
@@ -56,8 +57,8 @@ exports.coachHandler = {
         const coachPlayers = []
         for (let i = 0; i < req.user.coachPlayers.length; i++) {
             Users.findOne({id: req.user.coachPlayers[i]}, function (err, player) {
-                coachPlayers.push(player)
-                if (i === req.user.coachPlayers.length - 1) {
+                coachPlayers.push({id: player.id, name: player.firstName})
+                if (coachPlayers.length === req.user.coachPlayers.length) {
                     res.send(coachPlayers).status(200)
                 }
                 if (err) {
