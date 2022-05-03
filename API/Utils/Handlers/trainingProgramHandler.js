@@ -5,18 +5,25 @@ const {exec} = require("child_process");
 
 exports.trainingProgramHandler = {
     async addTraining(req, res) {
+        console.log(req.body)
         const newTraining = new TrainingProgram({
             id: v4(),
             positions: {
-                pos1: req.body.positions.pos1,
-                pos2: req.body.positions.pos2,
-                pos3: req.body.positions.pos3,
-                pos4: req.body.positions.pos4,
-                pos5: req.body.positions.pos5,
+                pos1: req.body.trainingProgram.positions.pos1,
+                pos2: req.body.trainingProgram.positions.pos2,
+                pos3: req.body.trainingProgram.positions.pos3,
+                pos4: req.body.trainingProgram.positions.pos4,
+                pos5: req.body.trainingProgram.positions.pos5,
+                pos6: req.body.trainingProgram.positions.pos6,
+                minReqPos1: req.body.trainingProgram.positions.minReqPos1,
+                minReqPos2: req.body.trainingProgram.positions.minReqPos2,
+                minReqPos3: req.body.trainingProgram.positions.minReqPos3,
+                minReqPos4: req.body.trainingProgram.positions.minReqPos4,
+                minReqPos5: req.body.trainingProgram.positions.minReqPos5,
+                minReqPos6: req.body.trainingProgram.positions.minReqPos6,
             },
-            minimumRequest: req.body.minimumRequest,
-            level: req.body.level,
-            userId: req.body.userId ? req.body.userId : null,
+            level: req.body.trainingProgram.level,
+            userId: req.body.trainingProgram.userId ? req.body.trainingProgram.userId : null,
         });
         newTraining
             .save()

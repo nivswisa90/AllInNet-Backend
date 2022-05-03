@@ -5,7 +5,7 @@ const {
 } = require("../../API/Utils/Handlers/trainingProgramHandler");
 
 programsRouter.get("/:id?", trainingProgramHandler.getTrainingProgram);
-programsRouter.post("/", trainingProgramHandler.addTraining);
+programsRouter.post("/addprogram", trainingProgramHandler.addTraining);
 programsRouter.post("/start", trainingProgramHandler.startTraining);
 
 module.exports = {programsRouter};
