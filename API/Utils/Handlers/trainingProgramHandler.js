@@ -49,8 +49,8 @@ exports.trainingProgramHandler = {
         const user = req.user
         // 4Find one by user.id
         let filter = {}
-        if (req.params.id) {
-            filter = {id: req.params.id}
+        if (user) {
+            filter = {userId: user.id}
         }
         TrainingProgram.find(filter)
             .then((docs) => {
