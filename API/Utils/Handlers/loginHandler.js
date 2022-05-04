@@ -30,7 +30,7 @@ exports.loginHandler = {
             .then(docs => {
                 if (docs) {
                     if (!bcrypt.compareSync(req.body.values.password, docs.password)) {
-                        res.json('Wrong user or password')
+                        res.json({msg: 'Wrong user or password'})
                     } else {
                         const id = docs.id
                         setUserToken(id, res, "Successfully connected")
@@ -38,9 +38,9 @@ exports.loginHandler = {
                 } else {
                     logger.log({
                         level: "info",
-                        message: "User does not exist",
+                        message: "Wrong user or password",
                     });
-                    res.json('User does not exist').status(400)
+                    res.json({msg: 'Wrong user or password'}).status(400)
 
                 }
             })
