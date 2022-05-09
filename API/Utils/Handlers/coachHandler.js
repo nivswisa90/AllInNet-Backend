@@ -1,15 +1,17 @@
 const {logger} = require("../logger");
 const Users = require("../../../DB/Schemas/users");
-const {utils} = require("../utilsFunctions");
-const {raw} = require("express");
-
 exports.coachHandler = {
     // Coach add player by inserting player's email
     addPlayer(req, res) {
+        console.log(req.body, 'its here')
         Users.findOne({email: req.body.email})
             .then(docs => {
                 if (docs && docs.role === 'player') {
-                    Users.findOneAndUpdate({id: req.user.id}, {$push: {"players": docs.id}}, {new: true})
+                    Users.findOneAndUpdate({id: req.user.id},
+                        {
+                            $push: {"players": docs.id},
+                            $exists: false
+                        }, {new: true})
                         .then(() => {
                             logger.log({
                                 level: "info",
