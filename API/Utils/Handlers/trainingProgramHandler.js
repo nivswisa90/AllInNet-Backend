@@ -71,12 +71,26 @@ exports.trainingProgramHandler = {
             });
     },
     startTraining(req, res) {
-        const minRequest = req.body.minReq;
+        const trainingId = req.body.program.id
+        const token = req.headers['x-access-token']
+
+        let minReq = [
+            req.body.program.positions.minReqPos1,
+            req.body.program.positions.minReqPos2,
+            req.body.program.positions.minReqPos3,
+            req.body.program.positions.minReqPos4,
+            req.body.program.positions.minReqPos5,
+            req.body.program.positions.minReqPos6,
+        ]
+
+        console.log(token, trainingId, minReq)
+
         // Call to python with minRequest as parameter or call the DB later in results
         try {
             exec(
                 // Need to change the number 3 to be minRequest
-                `ssh -t pi@192.168.1.13 'cd /home/pi/Desktop/AllInNet-BallModule ;export DISPLAY=:0;python3 -m  ballmodule ${minRequest}'`,
+                // `ssh -t pi@raspberrypi.local 'cd /home/pi/Desktop/AllInNet-BallModule;export DISPLAY=:0;python3 -m ballmodule ${infos.token}'`,
+                `cd /Users/martinmazas/Desktop/AllInNet-BallModule;python3 -m ballmodule ${token} ${trainingId} ${minReq}`,
                 (error, stdout, stderr) => {
                     if (error) {
                         console.log(`error: ${error.message}`);
@@ -89,6 +103,7 @@ exports.trainingProgramHandler = {
                     console.log(`stdout: ${stdout}`);
                 }
             );
+
             res.send("The Ball module done his JOB!");
         } catch (err) {
             logger.log({

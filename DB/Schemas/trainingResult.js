@@ -5,10 +5,10 @@ const trainingProgramResultSchema = new Schema({
     trainingProgramId: {type: String},
     playerId: {type: String},
     positions: {type: Object},
-    totalThrows: {type: Number},
+    // totalThrows: {type: Number},
     result: {type: String},
     date: {type: String},
-    minRequest: {type: Number}
+    // minRequest: {type: Number}
 });
 const TrainingProgramResult = model(
     "trainingresult",

@@ -30,10 +30,16 @@ global.upload = multer({
 exports.utils = {
 
     calculateResult(minRequest, positions) {
-        const initialValue = 0
-        const totalSuccessful = positions.reduce((prev, curr) => prev + curr, initialValue);
-        let result = minRequest - totalSuccessful
-        return result <= 0 ? "Pass" : "Fail"
+        for(const pos in positions) {
+            if(positions[pos] < minRequest[pos]) {
+                return "Fail"
+            }
+        }
+        return "Pass"
+        // const initialValue = 0
+        // const totalSuccessful = positions.reduce((prev, curr) => prev + curr, initialValue);
+        // let result = minRequest - totalSuccessful
+        // return result <= 0 ? "Pass" : "Fail"
     },
 
     verifyJWT(req, res, next) {
