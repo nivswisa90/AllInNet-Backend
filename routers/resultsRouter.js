@@ -3,8 +3,9 @@ const multer = require("multer");
 const {resultHandler} = require("../API/Utils/Handlers/programResultsHandler");
 const resultsRouter = new Router();
 
-resultsRouter.get("/:id?", resultHandler.getTrainingResult);
+resultsRouter.get("/trainingResult", resultHandler.getTrainingResult);
 resultsRouter.post("/", resultHandler.addTrainingResult);
+resultsRouter.get('/frames', resultHandler.getFrames)
 resultsRouter.post('/upload', (req, res) => {
     upload(req, res, function (err) {
         console.log(uploadsDir)

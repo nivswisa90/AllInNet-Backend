@@ -80,14 +80,19 @@ exports.resultHandler = {
         res.json('done')
     },
 
+    getFrames(req, res) {
+        console.log(req.user.id)
+        res.send('get frames').status(200)
+    },
+
     getTrainingResult(req, res) {
-        let filter = {};
-        if (req.body.id) {
-            filter = {playerId: req.body.id}
-        } else {
-            filter = {playerId: req.user.id}
-        }
-        TrainingProgramResult.find(filter)
+        // let filter = {};
+        // if (req.body.id) {
+        //     filter = {playerId: req.body.id}
+        // } else {
+        //     filter = {playerId: req.user.id}
+        // }
+        TrainingProgramResult.find({playerId: req.user.id})
             .then((docs) => {
                 logger.log({
                     level: "info",

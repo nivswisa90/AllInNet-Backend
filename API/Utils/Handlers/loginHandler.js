@@ -85,16 +85,23 @@ exports.loginHandler = {
             })
     },
     getUsers(req, res) {
-        let filter = {}
-        if (req.params.value)
-            filter = req.params.value
-        Users.find({"email": {$regex: filter}})
+        Users.find({"role": "player"})
             .then(docs => {
                 logger.log({
                     level: "info",
                     message: `Successfully get all player`,
                 })
-                res.send(docs).status(200)
+
+                const players = []
+
+                docs.map(doc => {
+                    players.push({
+                        email: doc.email,
+                        name: doc.firstName + ' ' + doc.lastName
+                    })
+                })
+
+                res.send(players).status(200)
             }).catch(err => console.log(err))
     },
     getCurrentUser(req, res) {

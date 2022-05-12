@@ -3,20 +3,18 @@ const Users = require("../../../DB/Schemas/users");
 exports.coachHandler = {
     // Coach add player by inserting player's email
     addPlayer(req, res) {
-        console.log(req.body, 'its here')
         Users.findOne({email: req.body.email})
             .then(docs => {
                 if (docs && docs.role === 'player') {
                     Users.findOneAndUpdate({id: req.user.id},
                         {
                             $push: {"players": docs.id},
-                            $exists: false
                         }, {new: true})
                         .then(() => {
                             logger.log({
                                 level: "info",
                                 message: "Successfully added new team player",
-                            });
+                            })
                             res.send("Successfully added new team player")
                         })
                         .catch(err => {
