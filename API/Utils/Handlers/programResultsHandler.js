@@ -73,11 +73,10 @@ exports.resultHandler = {
             });
     },
 
-    getFrames(req, res) {
+    getFrame(req, res) {
         // Creates full path to user current dir
         // TODO: change the dir inside to be first the id of the training
 
-        const framesList = []
         let dir = path.resolve(appRoot.path, 'uploads') + `/${req.user.id}`
         if (!fs.existsSync(dir)) {
             logger.log({
@@ -89,28 +88,42 @@ exports.resultHandler = {
             let options = {
                 root: dir
             };
-            fs.readdirSync(dir).forEach(frame => framesList.push(frame))
-
-            res.sendFile(framesList[0], options, function (err) {
+            res.setHeader('Content-type','blob')
+            res.sendFile('frame1.jpeg', options, function (err) {
                 if (err) {
-                    logger.log({
-                        level: "info",
+                    logger.info({
+                        Success: "false",
                         message: `Error while GET frame - ${err}`,
-                    });
-                    // res.send(`Error while GET frame - ${err}`).status(500)
+                    })
                 } else {
-                    logger.log({
-                        level: "info",
-                        message: `Frame - ${framesList[0]} sent successfully`,
+                    logger.info({
+                        success: "true",
+                        message: `Frame - ${dir+'/frame1.jpeg'} sent successfully`,
                     });
-                    // res.send(`Frame - ${framesList[0]} sent successfully`).status(200)
                 }
             })
 
 
         }
     },
-
+    getFramesList(req,res){
+        const framesList = []
+        let dir = path.resolve(appRoot.path, 'uploads') + `/${req.user.id}`
+        if (!fs.existsSync(dir)) {
+            logger.log({
+                level: "info",
+                message: `There is no directory name - ${dir}`,
+            });
+            res.send(`There is no directory name - ${dir}`).status(404)
+        }else{
+            fs.readdirSync(dir).forEach(frame => framesList.push(frame))
+            logger.log({
+                level: "info",
+                message: `Frame list is ready`,
+            });
+            res.json(framesList).status(200)
+        }
+    },
     getTrainingResult(req, res) {
         // let filter = {};
         // if (req.body.id) {
