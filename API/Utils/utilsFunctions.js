@@ -6,12 +6,19 @@ const jwt = require('jsonwebtoken');
 const User = require("../../DB/Schemas/users");
 
 global.uploadsDir = path.resolve(appRoot.path, 'uploads')
+global.userDir = uploadsDir
+// in the request body or in the header should get the id, then creates new directry inside uplodas that eadh dir  realted to eadh training
 const storage = multer.diskStorage({
+    // TODO: change the dir inside to be first the id of the training
+    // like that let userDir = uploadsDir + `/${req.user.id}/${req.body.training.id}`
+
     destination: function (req, file, cb) {
-        if (!fs.existsSync(uploadsDir)) {
-            fs.mkdirSync(uploadsDir)
+        // Creates new dir with the current player ID inside the uploads directory
+        let userDir = uploadsDir + `/${req.user.id}`
+        if (!fs.existsSync(userDir)) {
+            fs.mkdirSync(userDir)
         }
-        cb(null, uploadsDir)
+        cb(null, userDir)
     },
     filename: function (req, file, cb) {
         cb(null, file.originalname)
@@ -30,8 +37,8 @@ global.upload = multer({
 exports.utils = {
 
     calculateResult(minRequest, positions) {
-        for(const pos in positions) {
-            if(positions[pos] < minRequest[pos]) {
+        for (const pos in positions) {
+            if (positions[pos] < minRequest[pos]) {
                 return "Fail"
             }
         }
@@ -62,9 +69,5 @@ exports.utils = {
         } else {
             res.json({message: "Incorrect Token Given", isLoggedIn: false})
         }
-    },
-
-    arrangeTeamPlayers(players) {
-
     }
 }

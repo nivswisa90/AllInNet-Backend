@@ -3,10 +3,11 @@ const {v4} = require("uuid");
 const {logger} = require("../logger");
 const {utils} = require("../utilsFunctions");
 const moment = require("moment");
-const fs = require('fs');
-const path = require('path');
-const TrainingProgram = require("../../../DB/Schemas/trainingProgram");
 
+// get Frames imports
+const appRoot = require('app-root-path')
+const path = require("path");
+const fs = require('fs')
 
 exports.resultHandler = {
     addTrainingResult(req, res) {
@@ -72,17 +73,42 @@ exports.resultHandler = {
             });
     },
 
-    saveImages(req, res) {
-        logger.log({
-            level: "info",
-            message: "Successfully saved images",
-        });
-        res.json('done')
-    },
-
     getFrames(req, res) {
-        console.log(req.user.id)
-        res.send('get frames').status(200)
+        // Creates full path to user current dir
+        // TODO: change the dir inside to be first the id of the training
+
+        const framesList = []
+        let dir = path.resolve(appRoot.path, 'uploads') + `/${req.user.id}`
+        if (!fs.existsSync(dir)) {
+            logger.log({
+                level: "info",
+                message: `There is no directory name - ${dir}`,
+            });
+            res.send(`There is no directory name - ${dir}`).status(404)
+        } else {
+            let options = {
+                root: dir
+            };
+            fs.readdirSync(dir).forEach(frame => framesList.push(frame))
+
+            res.sendFile(framesList[0], options, function (err) {
+                if (err) {
+                    logger.log({
+                        level: "info",
+                        message: `Error while GET frame - ${err}`,
+                    });
+                    // res.send(`Error while GET frame - ${err}`).status(500)
+                } else {
+                    logger.log({
+                        level: "info",
+                        message: `Frame - ${framesList[0]} sent successfully`,
+                    });
+                    // res.send(`Frame - ${framesList[0]} sent successfully`).status(200)
+                }
+            })
+
+
+        }
     },
 
     getTrainingResult(req, res) {
