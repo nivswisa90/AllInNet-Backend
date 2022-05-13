@@ -5,7 +5,6 @@ const {exec} = require("child_process");
 
 exports.trainingProgramHandler = {
     async addTraining(req, res) {
-        console.log(req.body)
         const newTraining = new TrainingProgram({
             id: v4(),
             positions: {

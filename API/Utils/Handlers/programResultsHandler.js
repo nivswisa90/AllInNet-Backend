@@ -93,17 +93,7 @@ exports.resultHandler = {
             let file = fs.createReadStream(path.resolve(dir,'frame1.jpeg'))
             res.setHeader('Content-disposition', `attachment; filename=frame1.jpeg`)
             res.setHeader('Content-type','image/jpeg')
-            // try{
-            //     let file = fs.createReadStream(path.resolve(dir,'frame1.jpeg'))
-            //     file.pipe(res)
-            // }
-            // catch(err){
-            //             logger.info({
-            //                 Success: "false",
-            //                 message: `Error while GET frame - ${err.message}`,
-            //             })
-            // }
-            res.sendFile('frame1.jpeg', options, function (err) {
+            res.sendFile('frame4.jpeg', options, function (err) {
                 if (err) {
                     logger.info({
                         Success: "false",
@@ -112,7 +102,7 @@ exports.resultHandler = {
                 } else {
                     logger.info({
                         success: "true",
-                        message: `Frame - ${dir+'/frame1.jpeg'} sent successfully`,
+                        message: `Frame - ${dir+'/frame4.jpeg'} sent successfully`,
                     });
                 }
             })
@@ -139,6 +129,7 @@ exports.resultHandler = {
         }
     },
     getTrainingResult(req, res) {
+        // GET by user ID(if player is connected) or by team player id of the coach
         let filter = {};
         if (req.params.id) {
             filter = {playerId: req.params.id}
