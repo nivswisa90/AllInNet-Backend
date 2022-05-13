@@ -3,7 +3,7 @@ const multer = require("multer");
 const {resultHandler} = require("../API/Utils/Handlers/programResultsHandler");
 const resultsRouter = new Router();
 
-resultsRouter.get("/trainingResult", resultHandler.getTrainingResult)
+resultsRouter.get("/trainingResult/:id?", resultHandler.getTrainingResult)
 resultsRouter.post("/", resultHandler.addTrainingResult)
 resultsRouter.get('/frameslist', resultHandler.getFramesList)
 resultsRouter.get('/frames', resultHandler.getFrame)

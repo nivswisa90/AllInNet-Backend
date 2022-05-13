@@ -8,6 +8,7 @@ const moment = require("moment");
 const appRoot = require('app-root-path')
 const path = require("path");
 const fs = require('fs')
+const {resolve} = require("app-root-path/browser-shim");
 
 exports.resultHandler = {
     addTrainingResult(req, res) {
@@ -82,13 +83,26 @@ exports.resultHandler = {
             logger.log({
                 level: "info",
                 message: `There is no directory name - ${dir}`,
+                success:'false'
             });
             res.send(`There is no directory name - ${dir}`).status(404)
         } else {
             let options = {
                 root: dir
             };
-            res.setHeader('Content-type','blob')
+            let file = fs.createReadStream(path.resolve(dir,'frame1.jpeg'))
+            res.setHeader('Content-disposition', `attachment; filename=frame1.jpeg`)
+            res.setHeader('Content-type','image/jpeg')
+            // try{
+            //     let file = fs.createReadStream(path.resolve(dir,'frame1.jpeg'))
+            //     file.pipe(res)
+            // }
+            // catch(err){
+            //             logger.info({
+            //                 Success: "false",
+            //                 message: `Error while GET frame - ${err.message}`,
+            //             })
+            // }
             res.sendFile('frame1.jpeg', options, function (err) {
                 if (err) {
                     logger.info({
@@ -125,13 +139,14 @@ exports.resultHandler = {
         }
     },
     getTrainingResult(req, res) {
-        // let filter = {};
-        // if (req.body.id) {
-        //     filter = {playerId: req.body.id}
-        // } else {
-        //     filter = {playerId: req.user.id}
-        // }
-        TrainingProgramResult.find({playerId: req.user.id})
+        let filter = {};
+        if (req.params.id) {
+            filter = {playerId: req.params.id}
+        } else {
+            filter = {playerId: req.user.id}
+        }
+
+        TrainingProgramResult.find({filter})
             .then((docs) => {
                 logger.log({
                     level: "info",
