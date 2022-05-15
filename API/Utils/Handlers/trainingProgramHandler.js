@@ -23,6 +23,7 @@ exports.trainingProgramHandler = {
             },
             level: req.body.trainingProgram.level,
             userId: req.body.trainingProgram.userId ? req.body.trainingProgram.userId : null,
+            isNew: true
         });
         newTraining
             .save()

@@ -77,7 +77,6 @@ exports.resultHandler = {
     getFrame(req, res) {
         // Creates full path to user current dir
         // TODO: change the dir inside to be first the id of the training
-
         let dir = path.resolve(appRoot.path, 'uploads') + `/${req.user.id}`
         if (!fs.existsSync(dir)) {
             logger.log({
@@ -90,8 +89,6 @@ exports.resultHandler = {
             let options = {
                 root: dir
             };
-            let file = fs.createReadStream(path.resolve(dir,'frame1.jpeg'))
-            res.setHeader('Content-disposition', `attachment; filename=frame1.jpeg`)
             res.setHeader('Content-type','image/jpeg')
             res.sendFile('frame4.jpeg', options, function (err) {
                 if (err) {
