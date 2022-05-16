@@ -51,7 +51,6 @@ exports.utils = {
 
     verifyJWT(req, res, next) {
         const token = req.headers["x-access-token"]
-        console.log('verify', token)
         if (token) {
             jwt.verify(token, process.env.PRIVATE_KEY, (err, decoded) => {
                 if (err) return res.status(401).json({

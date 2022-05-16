@@ -5,7 +5,7 @@ const trainingProgramSchema = new Schema({
     positions: {type: Object},
     level: {type: String},
     userId: {type: String},
-    isNew:{type:Boolean}
+    isNew: {type: Boolean}
 });
 const TrainingProgram = model("trainingprogram", trainingProgramSchema);
 module.exports = TrainingProgram;

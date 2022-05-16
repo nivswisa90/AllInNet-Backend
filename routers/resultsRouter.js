@@ -6,7 +6,7 @@ const resultsRouter = new Router();
 resultsRouter.get("/trainingResult/:id?", resultHandler.getTrainingResult)
 resultsRouter.post("/", resultHandler.addTrainingResult)
 resultsRouter.get('/frameslist', resultHandler.getFramesList)
-resultsRouter.get('/frames', resultHandler.getFrame)
+resultsRouter.get('/frames/:id', resultHandler.getFrame)
 
 
 resultsRouter.post('/upload', (req, res) => {

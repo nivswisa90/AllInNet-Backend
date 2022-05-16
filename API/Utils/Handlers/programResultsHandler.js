@@ -90,7 +90,7 @@ exports.resultHandler = {
                 root: dir
             };
             res.setHeader('Content-type','image/jpeg')
-            res.sendFile('frame4.jpeg', options, function (err) {
+            res.sendFile(req.params.id, options, function (err) {
                 if (err) {
                     logger.info({
                         Success: "false",
@@ -99,7 +99,7 @@ exports.resultHandler = {
                 } else {
                     logger.info({
                         success: "true",
-                        message: `Frame - ${dir+'/frame4.jpeg'} sent successfully`,
+                        message: `Frame - ${dir + `/${req.params.id}`} sent successfully`,
                     });
                 }
             })
