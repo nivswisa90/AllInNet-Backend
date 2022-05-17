@@ -15,7 +15,7 @@ exports.coachHandler = {
                                 level: "info",
                                 message: "Successfully added new team player",
                             })
-                            res.send("Successfully added new team player")
+                            res.send({msg:"Successfully added new team player"}).status(200)
                         })
                         .catch(err => {
                             logger.log({

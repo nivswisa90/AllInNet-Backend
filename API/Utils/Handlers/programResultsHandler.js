@@ -126,15 +126,7 @@ exports.resultHandler = {
         }
     },
     getTrainingResult(req, res) {
-        // GET by user ID(if player is connected) or by team player id of the coach
-        let filter = {};
-        if (req.params.id) {
-            filter = {playerId: req.params.id}
-        } else {
-            filter = {playerId: req.user.id}
-        }
-
-        TrainingProgramResult.find({filter})
+        TrainingProgramResult.find({playerId: req.params.id})
             .then((docs) => {
                 logger.log({
                     level: "info",
