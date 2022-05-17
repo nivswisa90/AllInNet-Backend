@@ -72,6 +72,9 @@ exports.trainingProgramHandler = {
     },
     startTraining(req, res) {
         const trainingId = req.body.program.id
+        TrainingProgram.findOneAndUpdate({id: trainingId}, {$set: {"isNew": false}})
+            .then(docs => console.log(docs))
+            .catch(err => console.log(err))
         const token = req.headers['x-access-token']
 
         let minReq = [

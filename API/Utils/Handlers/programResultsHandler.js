@@ -82,14 +82,14 @@ exports.resultHandler = {
             logger.log({
                 level: "info",
                 message: `There is no directory name - ${dir}`,
-                success:'false'
+                success: 'false'
             });
             res.send(`There is no directory name - ${dir}`).status(404)
         } else {
             let options = {
                 root: dir
             };
-            res.setHeader('Content-type','image/jpeg')
+            res.setHeader('Content-type', 'image/jpeg')
             res.sendFile(req.params.id, options, function (err) {
                 if (err) {
                     logger.info({
@@ -107,7 +107,7 @@ exports.resultHandler = {
 
         }
     },
-    getFramesList(req,res){
+    getFramesList(req, res) {
         const framesList = []
         let dir = path.resolve(appRoot.path, 'uploads') + `/${req.user.id}`
         if (!fs.existsSync(dir)) {
@@ -116,7 +116,7 @@ exports.resultHandler = {
                 message: `There is no directory name - ${dir}`,
             });
             res.send(`There is no directory name - ${dir}`).status(404)
-        }else{
+        } else {
             fs.readdirSync(dir).forEach(frame => framesList.push(frame))
             logger.log({
                 level: "info",
@@ -126,7 +126,8 @@ exports.resultHandler = {
         }
     },
     getTrainingResult(req, res) {
-        TrainingProgramResult.find({playerId: req.params.id})
+        const filter = {playerId: !req.user.coachPlayers ?  req.user.id : req.params.id}
+        TrainingProgramResult.find(filter)
             .then((docs) => {
                 logger.log({
                     level: "info",
