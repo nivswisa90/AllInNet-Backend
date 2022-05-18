@@ -50,7 +50,13 @@ exports.resultHandler = {
                 successPos3: req.body.successfulThrowPos3,
                 successPos4: req.body.successfulThrowPos4,
                 successPos5: req.body.successfulThrowPos5,
-                successPos6: req.body.successfulThrowPos6
+                successPos6: req.body.successfulThrowPos6,
+                min1: req.body.min1,
+                min2: req.body.min2,
+                min3: req.body.min3,
+                min4: req.body.min4,
+                min5: req.body.min5,
+                min6: req.body.min6,
             },
             totalThrows: req.body.totalThrows,
             result: result,
@@ -126,7 +132,7 @@ exports.resultHandler = {
         }
     },
     getTrainingResult(req, res) {
-        const filter = {playerId: !req.user.coachPlayers ?  req.user.id : req.params.id}
+        const filter = {playerId: !req.user.coachPlayers ? req.user.id : req.params.id}
         TrainingProgramResult.find(filter)
             .then((docs) => {
                 logger.log({
@@ -142,4 +148,22 @@ exports.resultHandler = {
             res.json(err).status(500);
         })
     },
+    getResults(req, res) {
+        console.log('Im here', req.user.id)
+        TrainingProgramResult.find({playerId: req.user.id})
+            .then(docs => {
+                logger.log({
+                    level: "info",
+                    message: `GET training results for player successful`,
+                });
+                res.send(docs).status(200)
+            })
+            .catch(err => {
+                logger.log({
+                    level: "info",
+                    message: `Unable to GET training program: ${err}`,
+                });
+                res.send('Error, see backend').status(400)
+            })
+    }
 };
