@@ -149,30 +149,64 @@ exports.resultHandler = {
         })
     },
     getResults(req, res) {
-        console.log('Im here', req.params.filter)
         const filtered = {
             total: 0,
             success: 0,
             min: 0
         }
+
+        const allFiltered = {
+            positions: {
+                counterPos1: 0,
+                successPos1: 0,
+                min1: 0,
+                counterPos2: 0,
+                successPos2: 0,
+                min2: 0,
+                counterPos3: 0,
+                successPos3: 0,
+                min3: 0,
+                counterPos4: 0,
+                successPos4: 0,
+                min4: 0,
+                counterPos5: 0,
+                successPos5: 0,
+                min5: 0,
+                counterPos6: 0,
+                successPos6: 0,
+                min6: 0
+            }
+
+        }
+
         TrainingProgramResult.find({playerId: req.user.id})
             .then(docs => {
                 logger.log({
                     level: "info",
                     message: `GET training results for player successful`,
                 });
-                docs.map(doc => {
-                    for (const pos in doc.positions) {
-                        pos.includes(req.params.filter[req.params.filter.length - 1]) && pos.includes('successPos') ?
-                            filtered.success += parseInt(doc.positions[pos]) : null
-                        pos.includes(req.params.filter[req.params.filter.length - 1]) && pos.includes('counterPos') ?
-                            filtered.total += parseInt(doc.positions[pos]) : null
-                        pos.includes(req.params.filter[req.params.filter.length - 1]) && pos.includes('min') ?
-                            filtered.min += parseInt(doc.positions[pos]) : null
-                    }
-                })
-                console.log(filtered)
-                res.send(filtered).status(200)
+
+                if (req.params.filter !== 'All') {
+                    docs.map(doc => {
+                        for (const pos in doc.positions) {
+                            pos.includes(req.params.filter[req.params.filter.length - 1]) && pos.includes('successPos') ?
+                                filtered.success += parseInt(doc.positions[pos]) : null
+                            pos.includes(req.params.filter[req.params.filter.length - 1]) && pos.includes('counterPos') ?
+                                filtered.total += parseInt(doc.positions[pos]) : null
+                            pos.includes(req.params.filter[req.params.filter.length - 1]) && pos.includes('min') ?
+                                filtered.min += parseInt(doc.positions[pos]) : null
+                        }
+                    })
+                    res.send(filtered).status(200)
+                } else {
+                    docs.map(doc => {
+                        for(const pos in doc.positions){
+                            allFiltered.positions[pos] += parseInt(doc.positions[pos])
+                            // console.log(pos, doc.positions[pos])
+                        }
+                    })
+                    res.send(allFiltered).status(200)
+                }
             })
             .catch(err => {
                 logger.log({
