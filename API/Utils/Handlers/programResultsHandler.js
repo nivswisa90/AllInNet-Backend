@@ -149,14 +149,30 @@ exports.resultHandler = {
         })
     },
     getResults(req, res) {
-        console.log('Im here', req.user.id)
+        console.log('Im here', req.params.filter)
+        const filtered = {
+            total: 0,
+            success: 0,
+            min: 0
+        }
         TrainingProgramResult.find({playerId: req.user.id})
             .then(docs => {
                 logger.log({
                     level: "info",
                     message: `GET training results for player successful`,
                 });
-                res.send(docs).status(200)
+                docs.map(doc => {
+                    for (const pos in doc.positions) {
+                        pos.includes(req.params.filter[req.params.filter.length - 1]) && pos.includes('successPos') ?
+                            filtered.success += parseInt(doc.positions[pos]) : null
+                        pos.includes(req.params.filter[req.params.filter.length - 1]) && pos.includes('counterPos') ?
+                            filtered.total += parseInt(doc.positions[pos]) : null
+                        pos.includes(req.params.filter[req.params.filter.length - 1]) && pos.includes('min') ?
+                            filtered.min += parseInt(doc.positions[pos]) : null
+                    }
+                })
+                console.log(filtered)
+                res.send(filtered).status(200)
             })
             .catch(err => {
                 logger.log({
