@@ -150,9 +150,11 @@ exports.resultHandler = {
     },
     getResults(req, res) {
         const filtered = {
-            total: 0,
-            success: 0,
-            min: 0
+            positions: {
+                total: 0,
+                success: 0,
+                min: 0
+            }
         }
 
         const allFiltered = {
@@ -190,11 +192,11 @@ exports.resultHandler = {
                     docs.map(doc => {
                         for (const pos in doc.positions) {
                             pos.includes(req.params.filter[req.params.filter.length - 1]) && pos.includes('successPos') ?
-                                filtered.success += parseInt(doc.positions[pos]) : null
+                                filtered.positions.success += parseInt(doc.positions[pos]) : null
                             pos.includes(req.params.filter[req.params.filter.length - 1]) && pos.includes('counterPos') ?
-                                filtered.total += parseInt(doc.positions[pos]) : null
+                                filtered.positions.total += parseInt(doc.positions[pos]) : null
                             pos.includes(req.params.filter[req.params.filter.length - 1]) && pos.includes('min') ?
-                                filtered.min += parseInt(doc.positions[pos]) : null
+                                filtered.positions.min += parseInt(doc.positions[pos]) : null
                         }
                     })
                     res.send(filtered).status(200)
