@@ -89,7 +89,7 @@ exports.loginHandler = {
             .then(docs => {
                 logger.log({
                     level: "info",
-                    message: `Successfully get all player`,
+                    message: `Successfully GET all player`,
                 })
 
                 const players = []
@@ -100,9 +100,15 @@ exports.loginHandler = {
                         name: doc.firstName + ' ' + doc.lastName
                     })
                 })
-
                 res.send(players).status(200)
-            }).catch(err => console.log(err))
+            }).catch(err => {
+            logger.log({
+                level: "Error",
+                message: `Unable to GET all players: ${err} `,
+            });
+            res.sendStatus(400).json(err);
+        })
+
     },
     getCurrentUser(req, res) {
         Users.find({id: req.user.id})
@@ -113,6 +119,12 @@ exports.loginHandler = {
                 })
                 const user = {name: docs[0].firstName, id: docs[0].id, role: docs[0].role}
                 res.send(user).status(200)
-            }).catch(err => console.log(err))
+            }).catch(err => {
+            logger.log({
+                level: "Error",
+                message: `Unable to GET all players: ${err} `,
+            })
+            res.sendStatus(400).json(err);
+        })
     }
 }

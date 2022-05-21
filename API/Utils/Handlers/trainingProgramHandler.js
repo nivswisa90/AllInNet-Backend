@@ -2,9 +2,11 @@ const TrainingProgram = require("../../../DB/Schemas/trainingProgram");
 const {v4} = require("uuid");
 const {logger} = require("../logger");
 const {exec} = require("child_process");
+const {utils} = require("../utilsFunctions");
 
 exports.trainingProgramHandler = {
     async addTraining(req, res) {
+        let calculatedLevel = utils.calculateTrainingLevel(req.body.trainingProgram.positions)
         const newTraining = new TrainingProgram({
             id: v4(),
             positions: {
@@ -21,7 +23,7 @@ exports.trainingProgramHandler = {
                 minReqPos5: req.body.trainingProgram.positions.minReqPos5,
                 minReqPos6: req.body.trainingProgram.positions.minReqPos6,
             },
-            level: req.body.trainingProgram.level,
+            level: calculatedLevel,
             userId: req.body.trainingProgram.userId ? req.body.trainingProgram.userId : null,
             isNew: true
         });
@@ -59,7 +61,6 @@ exports.trainingProgramHandler = {
                     message: "Successfully GET training program",
                 });
                 res.send(docs)
-
             })
             .catch((err) => {
                 logger.log({
@@ -85,9 +86,6 @@ exports.trainingProgramHandler = {
             req.body.program.positions.minReqPos5,
             req.body.program.positions.minReqPos6,
         ]
-
-        console.log(token, trainingId, minReq)
-
         // Call to python with minRequest as parameter or call the DB later in results
         try {
             exec(
@@ -106,7 +104,6 @@ exports.trainingProgramHandler = {
                     console.log(`stdout: ${stdout}`);
                 }
             );
-
             res.send("The Ball module done his JOB!");
         } catch (err) {
             logger.log({
@@ -114,10 +111,5 @@ exports.trainingProgramHandler = {
                 message: "Unable to run Ball Module",
             });
         }
-
-
-    },
-    endTraining(req, res) {
-        // Stop python
     },
 };

@@ -43,10 +43,23 @@ exports.utils = {
             }
         }
         return "Pass"
-        // const initialValue = 0
-        // const totalSuccessful = positions.reduce((prev, curr) => prev + curr, initialValue);
-        // let result = minRequest - totalSuccessful
-        // return result <= 0 ? "Pass" : "Fail"
+    },
+    calculateTrainingLevel(positions){
+        // Hard - Positions 1 and 5, more than 10 minimum request in each one
+        // Medium - All positions, if the more the 10 minimum request in each one
+        // Easy - All position, less than 10 minimum request in each one
+        if(positions.minReqPos1 >= 15 || positions.minReqPos5 >= 15){
+            if(positions.minReqPos2 >= 10 && positions.minReqPos3 >= 10 && positions.minReqPos4 >= 10 ){
+                return 'Hard'
+            }
+            return 'Medium'
+        }
+        else if(positions.minReqPos1 >= 10 && positions.minReqPos2 >= 10 && positions.minReqPos3 >= 10 && positions.minReqPos4 >= 10 && positions.minReqPos5 >= 10 ){
+            return 'medium'
+        }
+        else{
+            return 'Easy'
+        }
     },
 
     verifyJWT(req, res, next) {
