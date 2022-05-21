@@ -137,13 +137,13 @@ exports.resultHandler = {
             .then((docs) => {
                 logger.log({
                     level: "info",
-                    message: `GET training programs successfully`,
+                    message: `GET training results successfully`,
                 });
                 res.json(docs).status(200)
             }).catch((err) => {
             logger.log({
                 level: "info",
-                message: `Unable to GET training program: ${err}`,
+                message: `Unable to GET results program: ${err}`,
             });
             res.json(err).status(500);
         })

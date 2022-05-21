@@ -55,7 +55,7 @@ exports.utils = {
             return 'Medium'
         }
         else if(positions.minReqPos1 >= 10 && positions.minReqPos2 >= 10 && positions.minReqPos3 >= 10 && positions.minReqPos4 >= 10 && positions.minReqPos5 >= 10 ){
-            return 'medium'
+            return 'Medium'
         }
         else{
             return 'Easy'
