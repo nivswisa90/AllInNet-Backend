@@ -124,13 +124,13 @@ exports.resultHandler = {
             });
             res.send(`There is no directory name - ${dir}`).status(404)
         }
-        // else {
-        //     fs.readdirSync(dir).forEach(frame => framesList.push(frame))
-        //     logger.log({
-        //         level: "info",
-        //         message: `Frame list is ready`,
-        //     });
-        //     res.json(framesList).status(200)
+            // else {
+            //     fs.readdirSync(dir).forEach(frame => framesList.push(frame))
+            //     logger.log({
+            //         level: "info",
+            //         message: `Frame list is ready`,
+            //     });
+            //     res.json(framesList).status(200)
         // }
         else {
             let trainingId = dir + `/${req.params.trainingProgramId}`
@@ -200,8 +200,10 @@ exports.resultHandler = {
             }
 
         }
+        // const playerId = req.params.id !== undefined ? req.params.id : req.user.id
+        console.log('###########', req.params)
 
-        TrainingProgramResult.find({playerId: req.user.id})
+        TrainingProgramResult.find({playerId: req.params.id})
             .then(docs => {
                 logger.log({
                     level: "info",
@@ -222,7 +224,7 @@ exports.resultHandler = {
                     res.send(filtered).status(200)
                 } else {
                     docs.map(doc => {
-                        for(const pos in doc.positions){
+                        for (const pos in doc.positions) {
                             allFiltered.positions[pos] += parseInt(doc.positions[pos])
                         }
                     })
