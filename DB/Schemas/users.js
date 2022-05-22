@@ -8,7 +8,6 @@ const userSchema = new Schema({
     password: {type: String, required: true},
     role: {type: String, required: true},
     players: [String],
-    trainingPrograms: [String]
 });
 
 const User = model('users', userSchema);

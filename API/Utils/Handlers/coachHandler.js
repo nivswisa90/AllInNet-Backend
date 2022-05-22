@@ -33,25 +33,6 @@ exports.coachHandler = {
                 }
             })
     },
-
-    // Coach adds a training program to player by inserting player's id and trainingId
-    addProgramToPlayer(req, res) {
-        Users.findOneAndUpdate({id: req.body.id}, {$push: {"trainingPrograms": req.body.trainingId}}, {new: true})
-            .then(docs => {
-                logger.log({
-                    level: "info",
-                    message: `Successfully added new training program to  playerId - ${req.body.id}`,
-                })
-                res.send(`Successfully added new training program to  playerId - ${req.body.id}`).status(200)
-            }).catch(err => {
-            logger.log({
-                level: "info",
-                message: "Unable to add training program player"
-            })
-            res.status(400).json(err.message)
-        })
-    },
-
     // Return an array of player ids
     getTeamPlayers(req, res) {
         const coachPlayers = []

@@ -83,7 +83,8 @@ exports.resultHandler = {
     getFrame(req, res) {
         // Creates full path to user current dir
         // TODO: change the dir inside to be first the id of the training
-        let dir = path.resolve(appRoot.path, 'uploads') + `/${req.user.id}`
+        let dir = path.resolve(appRoot.path, 'uploads') + `/${req.params.playerId}/${req.params.trainingProgramId}`
+        console.log("NEW DIR IS: ", req.params)
         if (!fs.existsSync(dir)) {
             logger.log({
                 level: "info",
@@ -96,7 +97,7 @@ exports.resultHandler = {
                 root: dir
             };
             res.setHeader('Content-type', 'image/jpeg')
-            res.sendFile(req.params.id, options, function (err) {
+            res.sendFile(req.params.fileName, options, function (err) {
                 if (err) {
                     logger.info({
                         Success: "false",
@@ -105,7 +106,7 @@ exports.resultHandler = {
                 } else {
                     logger.info({
                         success: "true",
-                        message: `Frame - ${dir + `/${req.params.id}`} sent successfully`,
+                        message: `Frame - ${dir + `/${req.params.playerId}`} sent successfully`,
                     });
                 }
             })
@@ -115,21 +116,40 @@ exports.resultHandler = {
     },
     getFramesList(req, res) {
         const framesList = []
-        let dir = path.resolve(appRoot.path, 'uploads') + `/${req.user.id}`
+        let dir = path.resolve(appRoot.path, 'uploads') + `/${req.params.id}`
         if (!fs.existsSync(dir)) {
             logger.log({
                 level: "info",
                 message: `There is no directory name - ${dir}`,
             });
             res.send(`There is no directory name - ${dir}`).status(404)
-        } else {
-            fs.readdirSync(dir).forEach(frame => framesList.push(frame))
-            logger.log({
-                level: "info",
-                message: `Frame list is ready`,
-            });
-            res.json(framesList).status(200)
         }
+        // else {
+        //     fs.readdirSync(dir).forEach(frame => framesList.push(frame))
+        //     logger.log({
+        //         level: "info",
+        //         message: `Frame list is ready`,
+        //     });
+        //     res.json(framesList).status(200)
+        // }
+        else {
+            let trainingId = dir + `/${req.params.trainingProgramId}`
+            if (!fs.existsSync(trainingId)) {
+                logger.log({
+                    level: "info",
+                    message: `There is no directory name - ${trainingId}`,
+                });
+                res.send(`There is no directory name - ${trainingId}`).status(404)
+            } else {
+                fs.readdirSync(trainingId).forEach(frame => framesList.push(frame))
+                logger.log({
+                    level: "info",
+                    message: `Frame list is ready`,
+                });
+                res.json(framesList).status(200)
+            }
+        }
+
     },
     getTrainingResult(req, res) {
         const filter = {playerId: !req.user.coachPlayers ? req.user.id : req.params.id}
@@ -204,7 +224,6 @@ exports.resultHandler = {
                     docs.map(doc => {
                         for(const pos in doc.positions){
                             allFiltered.positions[pos] += parseInt(doc.positions[pos])
-                            // console.log(pos, doc.positions[pos])
                         }
                     })
                     res.send(allFiltered).status(200)

@@ -5,13 +5,12 @@ const resultsRouter = new Router();
 
 resultsRouter.get("/trainingResult/:id?", resultHandler.getTrainingResult)
 resultsRouter.post("/", resultHandler.addTrainingResult)
-resultsRouter.get('/frameslist', resultHandler.getFramesList)
-resultsRouter.get('/frames/:id', resultHandler.getFrame)
+resultsRouter.get('/frameslist/:id/:trainingProgramId', resultHandler.getFramesList)
+resultsRouter.get('/frames/:playerId/:trainingProgramId/:fileName', resultHandler.getFrame)
 resultsRouter.get('/getResults/:filter?', resultHandler.getResults)
 
 resultsRouter.post('/upload', (req, res) => {
     upload(req, res, function (err) {
-        console.log(uploadsDir)
         if (err instanceof multer.MulterError) {
             // A Multer error occurred when uploading.
             res.status(500).send({error: {message: `Multer uploading error: ${err.message}`}}).end();
