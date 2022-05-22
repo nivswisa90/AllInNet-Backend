@@ -90,7 +90,7 @@ exports.trainingProgramHandler = {
         try {
             exec(
                 // Need to change the number 3 to be minRequest
-                `ssh -p "12345" ssh pi@raspberrypi.local 'cd /home/pi/Desktop/AllInNet-BallModule;export DISPLAY=:0;python3 -m ballmodule ${token} ${trainingId} ${minReq}`,
+                `ssh pi@raspberrypi.local 'cd /home/pi/Desktop/AllInNet-BallModule;export DISPLAY=:0;python3 -m ballmodule ${token} ${trainingId} ${minReq}`,
                 // `cd /Users/martinmazas/Desktop/AllInNet-BallModule;python3 -m ballmodule ${token} ${trainingId} ${minReq}`,
                 (error, stdout, stderr) => {
                     if (error) {
