@@ -10,6 +10,7 @@ const {NodeSSH} = require('node-ssh')
 const ssh = new NodeSSH()
 const sshHost = process.env.SSH_host
 const sshUser = process.env.SSH_user
+const sshPassword = process.env.SSH_password
 
 exports.trainingProgramHandler = {
     async addTraining(req, res) {
@@ -98,7 +99,7 @@ exports.trainingProgramHandler = {
             ssh.connect({
                 host: sshHost,
                 username: sshUser,
-                password: '12345'
+                password: sshPassword
                 // privateKey: '/home/steel/.ssh/id_rsa'
             }).then(() => {
                 // ssh.execCommand({cwd: '/home/pi/Desktop/AllInNet-BallModule'}`'cd /home/pi/Desktop/AllInNet-BallModule;export DISPLAY=:0;python3 -m ballmodule ${token} ${trainingId} ${minReq}'`).then(function(result) {
