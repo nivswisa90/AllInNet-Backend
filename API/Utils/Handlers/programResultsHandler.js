@@ -84,7 +84,6 @@ exports.resultHandler = {
         // Creates full path to user current dir
         // TODO: change the dir inside to be first the id of the training
         let dir = path.resolve(appRoot.path, 'uploads') + `/${req.params.playerId}/${req.params.trainingProgramId}`
-        console.log("NEW DIR IS: ", req.params)
         if (!fs.existsSync(dir)) {
             logger.log({
                 level: "info",
@@ -200,8 +199,6 @@ exports.resultHandler = {
             }
 
         }
-        // const playerId = req.params.id !== undefined ? req.params.id : req.user.id
-        console.log('###########', req.params)
 
         TrainingProgramResult.find({playerId: req.params.id})
             .then(docs => {

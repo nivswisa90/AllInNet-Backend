@@ -3,6 +3,13 @@ const {v4} = require("uuid");
 const {logger} = require("../logger");
 const {exec} = require("child_process");
 const {utils} = require("../utilsFunctions");
+const fs = require('fs')
+const path = require('path')
+const {NodeSSH} = require('node-ssh')
+
+const ssh = new NodeSSH()
+const sshHost = process.env.SSH_host
+const sshUser = process.env.SSH_user
 
 exports.trainingProgramHandler = {
     async addTraining(req, res) {
@@ -86,30 +93,48 @@ exports.trainingProgramHandler = {
             req.body.program.positions.minReqPos5,
             req.body.program.positions.minReqPos6,
         ]
-        // Call to python with minRequest as parameter or call the DB later in results
+
         try {
-            exec(
-                // Need to change the number 3 to be minRequest
-                `ssh -t pi@raspberrypi.local; 'cd /home/pi/Desktop/AllInNet-BallModule;export DISPLAY=:0;python3 -m ballmodule ${token} ${trainingId} ${minReq}'`,
-                // `cd /Users/martinmazas/Desktop/AllInNet-BallModule;python3 -m ballmodule ${token} ${trainingId} ${minReq}`,
-                (error, stdout, stderr) => {
-                    if (error) {
-                        console.log(`error: ${error.message}`);
-                        return;
-                    }
-                    if (stderr) {
-                        console.log(`stderr: ${stderr}`);
-                        return;
-                    }
-                    console.log(`stdout: ${stdout}`);
-                }
-            );
-            res.send("The Ball module done his JOB!");
-        } catch (err) {
-            logger.log({
-                level: "info",
-                message: "Unable to run Ball Module",
-            });
-        }
-    },
-};
+            ssh.connect({
+                host: sshHost,
+                username: sshUser,
+                password: '12345'
+                // privateKey: '/home/steel/.ssh/id_rsa'
+            }).then(() => {
+                // ssh.execCommand({cwd: '/home/pi/Desktop/AllInNet-BallModule'}`'cd /home/pi/Desktop/AllInNet-BallModule;export DISPLAY=:0;python3 -m ballmodule ${token} ${trainingId} ${minReq}'`).then(function(result) {
+                // ssh.execCommand('export DISPLAY=:0').then(function (result) {
+                //     console.log('STDOUT: ' + result.stdout)
+                //     console.log('STDERR: ' + result.stderr)
+                // })
+                ssh.execCommand(`export DISPLAY=:0&&python3 -m ballmodule ${token} ${trainingId} ${minReq}`, {cwd: '/home/pi/Desktop/AllInNet-BallModule'}).then(function (result) {
+                    console.log('STDOUT: ' + result.stdout)
+                    console.log('STDERR: ' + result.stderr)
+                })
+            }
+    )
+
+        // exec(
+        //     `ssh -t pi@raspberrypi.local 'cd /home/pi/Desktop/AllInNet-BallModule;export DISPLAY=:0;python3 -m ballmodule ${token} ${trainingId} ${minReq}'`,
+        //     // `cd /Users/martinmazas/Desktop/AllInNet-BallModule;python3 -m ballmodule ${token} ${trainingId} ${minReq}`,
+        //     (error, stdout, stderr) => {
+        //         if (error) {
+        //             console.log(`error: ${error.message}`);
+        //             return;
+        //         }
+        //         if (stderr) {
+        //             console.log(`stderr: ${stderr}`);
+        //             return;
+        //         }
+        //         console.log(`stdout: ${stdout}`);
+        //     }
+        // )
+        res.send("The Ball module done his JOB!");
+    } catch(err) {
+        logger.log({
+            level: "info",
+            message: "Unable to run Ball Module",
+        });
+    }
+},
+}
+;
