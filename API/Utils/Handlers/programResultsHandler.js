@@ -8,7 +8,6 @@ const moment = require("moment");
 const appRoot = require('app-root-path')
 const path = require("path");
 const fs = require('fs')
-const {resolve} = require("app-root-path/browser-shim");
 
 const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
@@ -40,6 +39,7 @@ exports.resultHandler = {
             id: v4(),
             trainingProgramId: req.body.id,
             playerId: req.user.id,
+            title: req.body.title,
             positions: {
                 counterPos1: req.body.counterThrowPos1,
                 counterPos2: req.body.counterThrowPos2,
