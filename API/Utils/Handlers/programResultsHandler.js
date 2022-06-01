@@ -10,6 +10,8 @@ const path = require("path");
 const fs = require('fs')
 const {resolve} = require("app-root-path/browser-shim");
 
+const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
 exports.resultHandler = {
     addTrainingResult(req, res) {
         let successPositions = {
@@ -168,6 +170,21 @@ exports.resultHandler = {
         })
     },
     getResults(req, res) {
+        const now = new Date()
+        console.log(now.getDate(), now.getMonth() + 1, now.getFullYear())
+        console.log(req.params.date)
+        let date = 0
+        switch (req.params.date){
+            case '7 days':
+                date = 7
+                break
+            case '30 days':
+                date = 30
+                break
+            default:
+                date = 0
+        }
+
         const filtered = {
             positions: {
                 total: 0,
@@ -197,7 +214,6 @@ exports.resultHandler = {
                 successPos6: 0,
                 min6: 0
             }
-
         }
 
         TrainingProgramResult.find({playerId: req.params.id})
@@ -209,6 +225,8 @@ exports.resultHandler = {
 
                 if (req.params.filter !== 'All') {
                     docs.map(doc => {
+                        const tmpDate = `${monthNames[now.getMonth()]} ${now.getDate()} ${now.getFullYear()}`
+                        console.log(tmpDate, doc.date)
                         for (const pos in doc.positions) {
                             pos.includes(req.params.filter[req.params.filter.length - 1]) && pos.includes('successPos') ?
                                 filtered.positions.success += parseInt(doc.positions[pos]) : null

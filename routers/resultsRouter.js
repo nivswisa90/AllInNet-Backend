@@ -7,7 +7,7 @@ resultsRouter.get("/trainingResult/:id?", resultHandler.getTrainingResult)
 resultsRouter.post("/", resultHandler.addTrainingResult)
 resultsRouter.get('/frameslist/:id/:trainingProgramId', resultHandler.getFramesList)
 resultsRouter.get('/frames/:playerId/:trainingProgramId/:fileName', resultHandler.getFrame)
-resultsRouter.get('/getResults/:id?/:filter', resultHandler.getResults)
+resultsRouter.get('/getResults/:id?/:filter/:date', resultHandler.getResults)
 
 resultsRouter.post('/upload', (req, res) => {
     upload(req, res, function (err) {
