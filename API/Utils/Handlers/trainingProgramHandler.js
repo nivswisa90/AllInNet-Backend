@@ -17,6 +17,7 @@ exports.trainingProgramHandler = {
         let calculatedLevel = utils.calculateTrainingLevel(req.body.trainingProgram.positions)
         const newTraining = new TrainingProgram({
             id: v4(),
+            title: req.body.trainingProgram.title,
             positions: {
                 pos1: req.body.trainingProgram.positions.pos1,
                 pos2: req.body.trainingProgram.positions.pos2,
@@ -85,6 +86,7 @@ exports.trainingProgramHandler = {
             .then(docs => console.log(docs))
             .catch(err => console.log(err))
         const token = req.headers['x-access-token']
+        const title = req.body.program.title
 
         let minReq = [
             req.body.program.positions.minReqPos1,
@@ -115,7 +117,7 @@ exports.trainingProgramHandler = {
 
             exec(
                 // `ssh -t pi@raspberrypi.local 'cd /home/pi/Desktop/AllInNet-BallModule;export DISPLAY=:0;python3 -m ballmodule ${token} ${trainingId} ${minReq}'`,
-                `cd /Users/martinmazas/Desktop/AllInNet-BallModule;python3 -m ballmodule ${token} ${trainingId} ${minReq}`,
+                `cd /Users/martinmazas/Desktop/AllInNet-BallModule;python3 -m ballmodule ${token} ${trainingId} ${minReq} ${title}`,
                 (error, stdout, stderr) => {
                     if (error) {
                         console.log(`error: ${error.message}`);
