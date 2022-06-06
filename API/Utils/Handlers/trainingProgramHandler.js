@@ -15,6 +15,7 @@ const sshPassword = process.env.SSH_password
 exports.trainingProgramHandler = {
     async addTraining(req, res) {
         let calculatedLevel = utils.calculateTrainingLevel(req.body.trainingProgram.positions)
+        const minimum = utils.getMinimumRequestFromPercentage(req.body.trainingProgram.positions)
         const newTraining = new TrainingProgram({
             id: v4(),
             title: req.body.trainingProgram.title,
@@ -25,12 +26,12 @@ exports.trainingProgramHandler = {
                 pos4: req.body.trainingProgram.positions.pos4,
                 pos5: req.body.trainingProgram.positions.pos5,
                 pos6: req.body.trainingProgram.positions.pos6,
-                minReqPos1: req.body.trainingProgram.positions.minReqPos1,
-                minReqPos2: req.body.trainingProgram.positions.minReqPos2,
-                minReqPos3: req.body.trainingProgram.positions.minReqPos3,
-                minReqPos4: req.body.trainingProgram.positions.minReqPos4,
-                minReqPos5: req.body.trainingProgram.positions.minReqPos5,
-                minReqPos6: req.body.trainingProgram.positions.minReqPos6,
+                minReqPos1: minimum.min1,
+                minReqPos2: minimum.min2,
+                minReqPos3: minimum.min3,
+                minReqPos4: minimum.min4,
+                minReqPos5: minimum.min5,
+                minReqPos6: minimum.min6
             },
             level: calculatedLevel,
             userId: req.body.trainingProgram.userId ? req.body.trainingProgram.userId : null,

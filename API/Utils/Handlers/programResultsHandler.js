@@ -13,7 +13,7 @@ const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep
 
 exports.resultHandler = {
     addTrainingResult(req, res) {
-        let successPositions = {
+        const successPositions = {
             pos1: parseInt(req.body.successfulThrowPos1),
             pos2: parseInt(req.body.successfulThrowPos2),
             pos3: parseInt(req.body.successfulThrowPos3),
@@ -29,10 +29,18 @@ exports.resultHandler = {
             pos5: req.body.min5,
             pos6: req.body.min6
         }
+        const totalPositions = {
+            pos1: parseInt(req.body.counterThrowPos1),
+            pos2: parseInt(req.body.counterThrowPos2),
+            pos3: parseInt(req.body.counterThrowPos3),
+            pos4: parseInt(req.body.counterThrowPos4),
+            pos5: parseInt(req.body.counterThrowPos5),
+            pos6: parseInt(req.body.counterThrowPos6)
+        }
 
-        const result = utils.calculateResult(minRequestPositions, successPositions)
+        const result = utils.calculateResult(minRequestPositions, successPositions, totalPositions)
 
-        const currentDate = moment().format("MMMM DD YYYY");
+        const currentDate = moment().format("MMM DD YYYY");
         // Go to utils, to   check result(pass/fail)
 
         const newResult = new TrainingProgramResult({

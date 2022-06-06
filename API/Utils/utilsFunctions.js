@@ -19,7 +19,7 @@ const storage = multer.diskStorage({
             fs.mkdirSync(userDir)
         }
         let trainingId = userDir + `/${req.headers["programid"]}`
-        if(!fs.existsSync(trainingId)){
+        if (!fs.existsSync(trainingId)) {
             fs.mkdirSync(trainingId)
         }
         cb(null, trainingId)
@@ -40,28 +40,43 @@ global.upload = multer({
 
 exports.utils = {
 
-    calculateResult(minRequest, positions) {
+    calculateResult(minRequest, positions, total) {
+        let successful = 0
+        let position = 0
         for (const pos in positions) {
-            if (positions[pos] < minRequest[pos]) {
-                return "Fail"
+            if(total[pos] > 0){
+                position += 1
+                if (positions[pos] >= minRequest[pos]) {
+                    successful += 1
+                    // return "Fail"
+                }
             }
         }
-        return "Pass"
+        return successful*100/position
+        // return "Pass"
     },
-    calculateTrainingLevel(positions){
+    getMinimumRequestFromPercentage(positions) {
+        const min1 = Math.round(parseInt(positions.minReqPos1) * parseInt(positions.pos1) / 100)
+        const min2 = Math.round(parseInt(positions.minReqPos2) * parseInt(positions.pos2) / 100)
+        const min3 = Math.round(parseInt(positions.minReqPos3) * parseInt(positions.pos3) / 100)
+        const min4 = Math.round(parseInt(positions.minReqPos4) * parseInt(positions.pos4) / 100)
+        const min5 = Math.round(parseInt(positions.minReqPos5) * parseInt(positions.pos5) / 100)
+        const min6 = Math.round(parseInt(positions.minReqPos6) * parseInt(positions.pos6) / 100)
+
+        return {min1, min2, min3, min4, min5, min6}
+    },
+    calculateTrainingLevel(positions) {
         // Hard - Positions 1 and 5, more than 10 minimum request in each one
         // Medium - All positions, if the more the 10 minimum request in each one
         // Easy - All position, less than 10 minimum request in each one
-        if(positions.minReqPos1 >= 15 || positions.minReqPos5 >= 15){
-            if(positions.minReqPos2 >= 10 && positions.minReqPos3 >= 10 && positions.minReqPos4 >= 10 ){
+        if (positions.minReqPos1 >= 15 || positions.minReqPos5 >= 15) {
+            if (positions.minReqPos2 >= 10 && positions.minReqPos3 >= 10 && positions.minReqPos4 >= 10) {
                 return 'Hard'
             }
             return 'Medium'
-        }
-        else if(positions.minReqPos1 >= 10 && positions.minReqPos2 >= 10 && positions.minReqPos3 >= 10 && positions.minReqPos4 >= 10 && positions.minReqPos5 >= 10 ){
+        } else if (positions.minReqPos1 >= 10 && positions.minReqPos2 >= 10 && positions.minReqPos3 >= 10 && positions.minReqPos4 >= 10 && positions.minReqPos5 >= 10) {
             return 'Medium'
-        }
-        else{
+        } else {
             return 'Easy'
         }
     },
