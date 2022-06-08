@@ -40,14 +40,24 @@ global.upload = multer({
 
 exports.utils = {
 
-    calculateResult(minRequest, positions) {
-        for (const pos in positions) {
-            if (positions[pos] < minRequest[pos]) {
-                return "Fail"
-            }
+    calculateResult(minRequest, success) {
+        let positionPercentage = 0
+        let totalResult = []
+        // First calculate for each position the % of success throws,
+        // from the minimum requested amount of throws
+        let index = 0
+        for (const pos in success) {
+            positionPercentage = Math.floor(parseInt(success[pos])/parseInt(minRequest[pos])*100)
+            totalResult.push({pos:positionPercentage})
         }
-        return "Pass"
+        // Then calculate the average percentage of all the positions
+        let totalPercentage = 0
+        totalResult.map(res =>{
+            totalPercentage += parseInt(res.pos)
+        })
+        return String(Math.floor(totalPercentage/totalResult.length)) + '%'
     },
+
     calculateTrainingLevel(positions){
         // Hard - Positions 1 and 5, more than 10 minimum request in each one
         // Medium - All positions, if the more the 10 minimum request in each one

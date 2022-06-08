@@ -34,7 +34,6 @@ exports.resultHandler = {
 
         const currentDate = moment().format("MMMM DD YYYY");
         // Go to utils, to   check result(pass/fail)
-
         const newResult = new TrainingProgramResult({
             id: v4(),
             trainingProgramId: req.body.id,
@@ -171,8 +170,6 @@ exports.resultHandler = {
     },
     getResults(req, res) {
         const now = new Date()
-        console.log(now.getDate(), now.getMonth() + 1, now.getFullYear())
-        console.log(req.params.date)
         let date = 0
         switch (req.params.date){
             case '7 days':
@@ -226,7 +223,6 @@ exports.resultHandler = {
                 if (req.params.filter !== 'All') {
                     docs.map(doc => {
                         const tmpDate = `${monthNames[now.getMonth()]} ${now.getDate()} ${now.getFullYear()}`
-                        console.log(tmpDate, doc.date)
                         for (const pos in doc.positions) {
                             pos.includes(req.params.filter[req.params.filter.length - 1]) && pos.includes('successPos') ?
                                 filtered.positions.success += parseInt(doc.positions[pos]) : null
