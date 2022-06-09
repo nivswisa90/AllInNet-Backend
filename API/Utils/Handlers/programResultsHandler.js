@@ -170,6 +170,30 @@ exports.resultHandler = {
     getResults(req, res) {
         const start = new Date(req.params.start)
         const end = new Date(req.params.end)
+
+        const allFiltered = {
+            positions: {
+                counterPos1: 0,
+                successPos1: 0,
+                min1: 0,
+                counterPos2: 0,
+                successPos2: 0,
+                min2: 0,
+                counterPos3: 0,
+                successPos3: 0,
+                min3: 0,
+                counterPos4: 0,
+                successPos4: 0,
+                min4: 0,
+                counterPos5: 0,
+                successPos5: 0,
+                min5: 0,
+                counterPos6: 0,
+                successPos6: 0,
+                min6: 0
+            }
+        }
+
         TrainingProgramResult.find({
             date: {
                 $gte: start,
@@ -181,7 +205,12 @@ exports.resultHandler = {
                 level: "info",
                 message: `GET training results in date range start - ${start} till - ${end}`,
             });
-            res.send(docs)
+            docs.map(doc => {
+                for (const pos in doc.positions) {
+                    allFiltered.positions[pos] += parseInt(doc.positions[pos])
+                }
+            })
+            res.send(allFiltered).status(200)
         }).catch(err => console.log(err))
     }
 };
