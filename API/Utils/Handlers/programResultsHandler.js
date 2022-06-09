@@ -168,104 +168,20 @@ exports.resultHandler = {
         })
     },
     getResults(req, res) {
-        const now = new Date()
-        let date = 0
-
-        switch (req.params.date){
-            case '7 days':
-                date = 7
-                break
-            case '30 days':
-                date = 30
-                break
-            default:
-                date = 0
-        }
-
-        const filtered = {
-            positions: {
-                total: 0,
-                success: 0,
-                min: 0
-            }
-        }
-
-        const allFiltered = {
-            positions: {
-                counterPos1: 0,
-                successPos1: 0,
-                min1: 0,
-                counterPos2: 0,
-                successPos2: 0,
-                min2: 0,
-                counterPos3: 0,
-                successPos3: 0,
-                min3: 0,
-                counterPos4: 0,
-                successPos4: 0,
-                min4: 0,
-                counterPos5: 0,
-                successPos5: 0,
-                min5: 0,
-                counterPos6: 0,
-                successPos6: 0,
-                min6: 0
-            }
-        }
         const start = new Date(req.params.start)
         const end = new Date(req.params.end)
-        console.log(start, end)
-
-        // TrainingProgramResult.find({
-        //     // date:{
-        //     //     $gte: new Date(new Date(start).setHours(00,00,00)),
-        //     //     $lte: new Date(new Date(end).setHours(23,59,59))
-        //     // }
-        //          playerId: req.params.id
-        // }).then(docs =>{
-        //     let filtered = docs.filter( date => {let time = new Date(date.date); return (start <time && time < end)}
-        //     )
-        //     console.log(filtered)
-        //     res.send(filtered)
-        // }).catch(err=>console.log(err))
-
-
-
-        TrainingProgramResult.find({playerId: req.params.id})
-            .then(docs => {
-                logger.log({
-                    level: "info",
-                    message: `GET training results for player successful`,
-                });
-
-                if (req.params.filter !== 'All') {
-                    docs.map(doc => {
-                        const tmpDate = `${monthNames[now.getMonth()]} ${now.getDate()} ${now.getFullYear()}`
-                        for (const pos in doc.positions) {
-                            pos.includes(req.params.filter[req.params.filter.length - 1]) && pos.includes('successPos') ?
-                                filtered.positions.success += parseInt(doc.positions[pos]) : null
-                            pos.includes(req.params.filter[req.params.filter.length - 1]) && pos.includes('counterPos') ?
-                                filtered.positions.total += parseInt(doc.positions[pos]) : null
-                            pos.includes(req.params.filter[req.params.filter.length - 1]) && pos.includes('min') ?
-                                filtered.positions.min += parseInt(doc.positions[pos]) : null
-                        }
-                    })
-                    res.send(filtered).status(200)
-                } else {
-                    docs.map(doc => {
-                        for (const pos in doc.positions) {
-                            allFiltered.positions[pos] += parseInt(doc.positions[pos])
-                        }
-                    })
-                    res.send(allFiltered).status(200)
-                }
-            })
-            .catch(err => {
-                logger.log({
-                    level: "info",
-                    message: `Unable to GET training program: ${err}`,
-                });
-                res.send('Error, see backend').status(400)
-            })
+        TrainingProgramResult.find({
+            date: {
+                $gte: start,
+                $lte: end
+            },
+            playerId: req.params.playerid
+        }).then(docs => {
+            logger.log({
+                level: "info",
+                message: `GET training results in date range start - ${start} till - ${end}`,
+            });
+            res.send(docs)
+        }).catch(err => console.log(err))
     }
 };

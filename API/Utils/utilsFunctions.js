@@ -39,13 +39,21 @@ global.upload = multer({
 
 
 exports.utils = {
+    getMinimumRequestFromPercentage(positions) {
+        const min1 = Math.round(parseInt(positions.minReqPos1) * parseInt(positions.pos1) / 100)
+        const min2 = Math.round(parseInt(positions.minReqPos2) * parseInt(positions.pos2) / 100)
+        const min3 = Math.round(parseInt(positions.minReqPos3) * parseInt(positions.pos3) / 100)
+        const min4 = Math.round(parseInt(positions.minReqPos4) * parseInt(positions.pos4) / 100)
+        const min5 = Math.round(parseInt(positions.minReqPos5) * parseInt(positions.pos5) / 100)
+        const min6 = Math.round(parseInt(positions.minReqPos6) * parseInt(positions.pos6) / 100)
 
+        return {min1, min2, min3, min4, min5, min6}
+    },
     calculateResult(minRequest, success) {
         let positionPercentage = 0
         let totalResult = []
         // First calculate for each position the % of success throws,
         // from the minimum requested amount of throws
-        let index = 0
         for (const pos in success) {
             positionPercentage = Math.floor(parseInt(success[pos])/parseInt(minRequest[pos])*100)
             totalResult.push({pos:positionPercentage})
