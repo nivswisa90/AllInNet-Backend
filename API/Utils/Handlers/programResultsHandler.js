@@ -80,7 +80,6 @@ exports.resultHandler = {
                 res.status(400).json(err.message);
             });
     },
-
     getFrame(req, res) {
         // Creates full path to user current dir
         // TODO: change the dir inside to be first the id of the training
@@ -171,6 +170,7 @@ exports.resultHandler = {
     getResults(req, res) {
         const now = new Date()
         let date = 0
+
         switch (req.params.date){
             case '7 days':
                 date = 7
@@ -212,6 +212,24 @@ exports.resultHandler = {
                 min6: 0
             }
         }
+        const start = new Date(req.params.start)
+        const end = new Date(req.params.end)
+        console.log(start, end)
+
+        // TrainingProgramResult.find({
+        //     // date:{
+        //     //     $gte: new Date(new Date(start).setHours(00,00,00)),
+        //     //     $lte: new Date(new Date(end).setHours(23,59,59))
+        //     // }
+        //          playerId: req.params.id
+        // }).then(docs =>{
+        //     let filtered = docs.filter( date => {let time = new Date(date.date); return (start <time && time < end)}
+        //     )
+        //     console.log(filtered)
+        //     res.send(filtered)
+        // }).catch(err=>console.log(err))
+
+
 
         TrainingProgramResult.find({playerId: req.params.id})
             .then(docs => {

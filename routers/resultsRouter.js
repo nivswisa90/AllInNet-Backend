@@ -8,7 +8,7 @@ resultsRouter.post("/", resultHandler.addTrainingResult)
 resultsRouter.get('/frameslist/:id/:trainingProgramId', resultHandler.getFramesList)
 resultsRouter.get('/frames/:playerId/:trainingProgramId/:fileName', resultHandler.getFrame)
 resultsRouter.get('/getResults/:id?/:filter/:date', resultHandler.getResults)
-
+// resultsRouter.get('/:id?/:start/:end', resultHandler.getResults)
 resultsRouter.post('/upload', (req, res) => {
     upload(req, res, function (err) {
         if (err instanceof multer.MulterError) {
