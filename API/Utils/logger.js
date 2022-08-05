@@ -20,11 +20,26 @@ let options = {
         colorize: true,
         handleExceptions: true,
     },
+    errorConsole:
+    {
+        format: timestamp(),
+        level: "error",
+        json: true,
+        colorize: true,
+        handleExceptions: true,
+    },
+    debugConsole:
+    {
+        format: timestamp(),
+        level: "debug",
+        json: true,
+        colorize: true,
+        handleExceptions: true,
+    },
 };
 
 const logger = winston.createLogger({
     transports: [
-        // new winston.transports.File(options.file),
         new winston.transports.Console(options.console),
     ],
 });
